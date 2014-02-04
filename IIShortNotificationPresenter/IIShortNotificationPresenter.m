@@ -211,6 +211,10 @@ static inline BOOL IsEmpty(id thing) {
         _notificationView.alpha = 0;
         [_overlayView addSubview:_notificationView];
 
+        UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+        swiper.direction = UISwipeGestureRecognizerDirectionUp;
+        [_overlayView addGestureRecognizer:swiper];
+
         NSArray* constraints = @[
                                  // top
                                  [NSLayoutConstraint constraintWithItem:_notificationView
@@ -291,6 +295,10 @@ static inline BOOL IsEmpty(id thing) {
     }
     else
         [self dismiss:IIShortNotificationAutomaticUserDismissal];
+}
+
+- (void)swiped:(UITapGestureRecognizer*)swiper {
+    [self dismiss:IIShortNotificationAutomaticUserAccessoryDismissal];
 }
 
 #pragma mark - View class
