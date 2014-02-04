@@ -291,14 +291,14 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)tapped:(UITapGestureRecognizer*)tapper {
     if (_accessory & CGRectContainsPoint(_notificationView.bounds, [tapper locationInView:_notificationView])) {
-        [self dismiss:IIShortNotificationAutomaticUserAccessoryDismissal];
+        [self dismiss:IIShortNotificationUserAccessoryDismissal];
     }
     else
-        [self dismiss:IIShortNotificationAutomaticUserDismissal];
+        [self dismiss:IIShortNotificationUserDismissal];
 }
 
 - (void)swiped:(UITapGestureRecognizer*)swiper {
-    [self dismiss:IIShortNotificationAutomaticUserAccessoryDismissal];
+    [self dismiss:IIShortNotificationUserDismissal];
 }
 
 #pragma mark - View class
