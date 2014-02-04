@@ -75,6 +75,7 @@ static inline BOOL IsEmpty(id thing) {
         _titleLabel.font = [UIFont boldSystemFontOfSize:_titleLabel.font.pointSize];
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self applyTitleAppearance:_titleLabel];
         NSArray* constraints = @[
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeTop
@@ -109,6 +110,7 @@ static inline BOOL IsEmpty(id thing) {
         _messageLabel.textColor = [UIColor whiteColor];
         _messageLabel.numberOfLines = 999;
         _messageLabel.textAlignment = NSTextAlignmentCenter;
+        [self applyTitleAppearance:_messageLabel];
         NSArray* constraints = @[
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeTop
@@ -176,10 +178,12 @@ static inline BOOL IsEmpty(id thing) {
 - (CGSize)intrinsicContentSize {
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
     NSStringDrawingContext* context = [NSStringDrawingContext new];
-    CGFloat messageHeight = [_messageLabel.text boundingRectWithSize:CGSizeMake(300, CGFLOAT_MAX)
-                                                             options:0
+    CGRect rect = [_messageLabel.text boundingRectWithSize:CGSizeMake(300, CGFLOAT_MAX)
+                                                             options:NSStringDrawingUsesLineFragmentOrigin
                                                           attributes:@{NSFontAttributeName:_messageLabel.font}
-                                                             context:context].size.height;
+                                                             context:context];
+
+    CGFloat messageHeight = rect.size.height;
 
     CGFloat height = 20 + [self spacerHeight] + titleHeight + messageHeight + [self statusBarHeight];
     return CGSizeMake(320, height);
@@ -196,14 +200,14 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)setShortNotificationTitle:(NSString*)title
 {
-    _titleLabel.attributedText = [self attributedTitle:title];
+    _titleLabel.text = title;
     [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
 
 - (void)setShortNotificationMessage:(NSString*)message;
 {
-    _messageLabel.attributedText = [self attributedMessage:message];
+    _messageLabel.text = message;
     [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
@@ -241,14 +245,12 @@ static inline BOOL IsEmpty(id thing) {
 
 }
 
-- (NSAttributedString*)attributedTitle:(NSString*)title
-{
-    return title ? [[NSAttributedString alloc] initWithString:title attributes:nil] : nil;
+- (void)applyTitleAppearance:(UILabel*)label {
+
 }
 
-- (NSAttributedString*)attributedMessage:(NSString*)message
-{
-    return message ? [[NSAttributedString alloc] initWithString:message attributes:nil] : nil;
+- (void)applyMessageAppearance:(UILabel*)label {
+
 }
 
 - (UIView *)viewForAccessory {

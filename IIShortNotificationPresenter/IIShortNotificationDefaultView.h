@@ -13,7 +13,7 @@
 
 - (UIView*)viewForAccessory;
 - (UIColor*)colorForType:(IIShortNotificationType)type;
-- (NSAttributedString*)attributedTitle:(NSString*)title;
-- (NSAttributedString*)attributedMessage:(NSString*)message;
+- (void)applyTitleAppearance:(UILabel*)label;
+- (void)applyMessageAppearance:(UILabel*)label;
 
 @end

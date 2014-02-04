@@ -31,7 +31,7 @@
             break;
         case 2:
             sender.alpha = 0.5;
-            [self presentError:@"A message, a title and a callback." title:@"Awesomeness" completion:^{
+            [self presentError:@"A message, a title and a callback. This is pretty long.\n\nEven multiline." title:@"Awesomeness" completion:^{
                 sender.alpha = 1;
             }];
             break;
@@ -48,7 +48,7 @@
             break;
         case 2:
             sender.alpha = 0.5;
-            [self presentNotification:@"A message, a title and a callback." title:@"Awesomeness" accessory:arc4random()%2 completion:^(IIShortNotificationDismissal dismissal){
+            [self presentNotification:@"A message, a title and a callback. There more to it than meets the eye." title:@"Awesomeness" accessory:arc4random()%2 completion:^(IIShortNotificationDismissal dismissal){
                 sender.alpha = 1;
             }];
             break;
