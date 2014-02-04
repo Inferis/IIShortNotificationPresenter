@@ -9,5 +9,6 @@ Pod::Spec.new do |s|
   s.source    = { :git => 'https://github.com/Inferis/IIShortNotificationPresenter.git',
                   :tag => '1.0'}
   s.source_files  = 'IIShortNotificationPresenter/*.{h,m}'
+  s.resources     = 'IIShortNotificationPresenter/*.png'
   s.requires_arc  = true
 end
