@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="0bf-Rd-N4S">
+            <objects>
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="Hje-H9-9Uh" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ryA-Eh-OPo">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="f32-fM-xLc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m0T-BP-qcD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="93" y="165"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nOR-tQ-yoL"/>
+                        <viewControllerLayoutGuide type="bottom" id="fbN-Ps-GZJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PDa-lQ-HXc">
+                                <rect key="frame" x="10" y="442" width="300" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Error">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressedError:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="mHO-5i-tLc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="16C-Sq-TaF">
+                                <rect key="frame" x="10" y="482" width="300" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Notification">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressedNotification:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="i0Y-oW-Q6P"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="td5-gW-meD">
+                                <rect key="frame" x="10" y="525" width="300" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Confirmation">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressedConfirmation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="5Yt-At-gsg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="PDa-lQ-HXc" secondAttribute="trailing" constant="10" id="0Tu-ar-5yy"/>
+                            <constraint firstItem="fbN-Ps-GZJ" firstAttribute="top" secondItem="td5-gW-meD" secondAttribute="bottom" constant="10" id="0YZ-bd-EIV"/>
+                            <constraint firstItem="td5-gW-meD" firstAttribute="top" secondItem="16C-Sq-TaF" secondAttribute="bottom" constant="10" id="EX4-LM-IoZ"/>
+                            <constraint firstAttribute="trailing" secondItem="td5-gW-meD" secondAttribute="trailing" constant="10" id="KFn-7n-bJG"/>
+                            <constraint firstItem="td5-gW-meD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="QVH-Rr-iHC"/>
+                            <constraint firstItem="16C-Sq-TaF" firstAttribute="top" secondItem="PDa-lQ-HXc" secondAttribute="bottom" constant="10" id="fgl-Vb-dr5"/>
+                            <constraint firstItem="16C-Sq-TaF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="j1v-CT-gUx"/>
+                            <constraint firstItem="PDa-lQ-HXc" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="qAA-fg-iLj"/>
+                            <constraint firstAttribute="trailing" secondItem="16C-Sq-TaF" secondAttribute="trailing" constant="10" id="xsL-vW-oMS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="3oY-v6-4Yo"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="953" y="151"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
