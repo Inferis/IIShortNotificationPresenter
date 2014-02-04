@@ -110,7 +110,7 @@ static inline BOOL IsEmpty(id thing) {
         _messageLabel.textColor = [UIColor whiteColor];
         _messageLabel.numberOfLines = 999;
         _messageLabel.textAlignment = NSTextAlignmentCenter;
-        [self applyTitleAppearance:_messageLabel];
+        [self applyMessageAppearance:_messageLabel];
         NSArray* constraints = @[
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeTop
@@ -215,7 +215,14 @@ static inline BOOL IsEmpty(id thing) {
 - (void)setShortNotificationType:(IIShortNotificationType)type;
 {
     self.backgroundColor = [self colorForType:type];
-    self.layer.shadowColor = self.backgroundColor.CGColor;
+
+    // darker shadow
+    CGFloat h, s, b, a;
+    [self.backgroundColor getHue:&h saturation:&s brightness:&b alpha:&a];
+    s *= 0.5;
+    b *= 0.5;
+    self.layer.shadowColor = [UIColor colorWithHue:h saturation:s brightness:b alpha:a].CGColor;
+
     [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
