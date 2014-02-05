@@ -200,19 +200,17 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)setShortNotificationTitle:(NSString*)title
 {
-    _titleLabel.text = title;
     [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
 
 - (void)setShortNotificationMessage:(NSString*)message;
 {
-    _messageLabel.text = message;
     [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
 
-- (void)setShortNotificationType:(IIShortNotificationType)type;
+- (void)setShortNotificationType:(IIShortNotificationType)type title:(NSString *)title message:(NSString *)message accessoryVisible:(BOOL)accessoryVisible
 {
     self.backgroundColor = [self colorForType:type];
 
@@ -223,13 +221,13 @@ static inline BOOL IsEmpty(id thing) {
     b *= 0.5;
     self.layer.shadowColor = [UIColor colorWithHue:h saturation:s brightness:b alpha:a].CGColor;
 
-    [self invalidateIntrinsicContentSize];
-    [self setNeedsUpdateConstraints];
-}
-
-- (void)setShortNotificationAccessoryVisible:(BOOL)accessoryVisible;
-{
+    // strings
+    _titleLabel.text = title ?: [self defaultTitleForType:type];
+    _messageLabel.text = message;
+    // accessory
     _accessoryView.hidden = !accessoryVisible;
+
+    [self invalidateIntrinsicContentSize];
     [self setNeedsUpdateConstraints];
 }
 
@@ -262,6 +260,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (UIView *)viewForAccessory {
     return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationDefaultChevron"]];
+}
+
+- (NSString*)defaultTitleForType:(IIShortNotificationType)type {
+    return nil;
 }
 
 @end

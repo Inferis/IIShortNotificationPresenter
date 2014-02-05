@@ -246,10 +246,7 @@ static inline BOOL IsEmpty(id thing) {
     }
 
     _notificationView.alpha = 0;
-    [_notificationView setShortNotificationType:type];
-    [_notificationView setShortNotificationTitle:title];
-    [_notificationView setShortNotificationMessage:message];
-    [_notificationView setShortNotificationAccessoryVisible:accessory];
+    [_notificationView setShortNotificationType:type title:title message:message accessoryVisible:accessory];
     _topConstraint.constant = -_notificationView.intrinsicContentSize.height;
     [_overlayView layoutIfNeeded];
 

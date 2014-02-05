@@ -14,9 +14,9 @@
  */
 @protocol IIShortNotificationView <NSObject>
 
-- (void)setShortNotificationTitle:(NSString*)title;
-- (void)setShortNotificationMessage:(NSString*)message;
-- (void)setShortNotificationType:(IIShortNotificationType)type;
-- (void)setShortNotificationAccessoryVisible:(BOOL)accessoryVisible;
+- (void)setShortNotificationType:(IIShortNotificationType)type
+                           title:(NSString*)title
+                          message:(NSString*)message
+                 accessoryVisible:(BOOL)accessoryVisible;
 
 @end

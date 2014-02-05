@@ -15,5 +15,6 @@
 - (UIColor*)colorForType:(IIShortNotificationType)type;
 - (void)applyTitleAppearance:(UILabel*)label;
 - (void)applyMessageAppearance:(UILabel*)label;
+- (NSString*)defaultTitleForType:(IIShortNotificationType)type;
 
 @end
