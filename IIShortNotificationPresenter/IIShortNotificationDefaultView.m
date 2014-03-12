@@ -8,6 +8,8 @@
 
 #import "IIShortNotificationDefaultView.h"
 
+#define MARGIN 15
+
 static inline BOOL IsEmpty(id thing) {
     if (thing == nil) return YES;
     if ([thing isEqual:[NSNull null]]) return YES;
@@ -22,6 +24,7 @@ static inline BOOL IsEmpty(id thing) {
     NSLayoutConstraint* _spacerConstraint;
     NSLayoutConstraint* _accessoryTopConstraint;
     UIView* _accessoryView;
+    UIView* _slideupView;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -60,13 +63,40 @@ static inline BOOL IsEmpty(id thing) {
                                                                  toItem:self
                                                               attribute:NSLayoutAttributeRight
                                                              multiplier:1
-                                                               constant:-10]
+                                                               constant:-MARGIN]
                                  ];
 
         [self addSubview:_accessoryView];
         [self addConstraints:constraints];
         [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
         _accessoryTopConstraint = [constraints firstObject];
+    }
+
+    if (!_slideupView) {
+        _slideupView = [self viewForSlideupAccessory];
+        _slideupView.translatesAutoresizingMaskIntoConstraints = NO;
+        NSArray* constraints = @[
+                                 // align horizontally
+                                 [NSLayoutConstraint constraintWithItem:_slideupView
+                                                              attribute:NSLayoutAttributeCenterX
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self
+                                                              attribute:NSLayoutAttributeCenterX
+                                                             multiplier:1
+                                                               constant:0],
+                                 // pin to bottom
+                                 [NSLayoutConstraint constraintWithItem:_slideupView
+                                                              attribute:NSLayoutAttributeBottom
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self
+                                                              attribute:NSLayoutAttributeBottom
+                                                             multiplier:1
+                                                               constant:-MARGIN]
+                                 ];
+
+        [self addSubview:_slideupView];
+        [self addConstraints:constraints];
+        [_slideupView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisVertical];
     }
 
     if (!_titleLabel) {
@@ -83,21 +113,21 @@ static inline BOOL IsEmpty(id thing) {
                                                                  toItem:self
                                                               attribute:NSLayoutAttributeTop
                                                              multiplier:1
-                                                               constant:10],
+                                                               constant:MARGIN],
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeLeft
                                                               relatedBy:NSLayoutRelationEqual
                                                                  toItem:self
                                                               attribute:NSLayoutAttributeLeft
                                                              multiplier:1
-                                                               constant:10],
+                                                               constant:MARGIN],
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeRight
                                                               relatedBy:NSLayoutRelationEqual
                                                                  toItem:self
                                                               attribute:NSLayoutAttributeRight
                                                              multiplier:1
-                                                               constant:-10]
+                                                               constant:-MARGIN]
                                  ];
         [self addSubview:_titleLabel];
         [self addConstraints:constraints];
@@ -118,21 +148,21 @@ static inline BOOL IsEmpty(id thing) {
                                                                toItem:_titleLabel
                                                             attribute:NSLayoutAttributeBottom
                                                            multiplier:1
-                                                             constant:10],
+                                                             constant:MARGIN],
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeLeft
                                                             relatedBy:NSLayoutRelationEqual
                                                                toItem:self
                                                             attribute:NSLayoutAttributeLeft
                                                            multiplier:1
-                                                             constant:10],
+                                                             constant:MARGIN],
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeRight
                                                             relatedBy:NSLayoutRelationEqual
                                                                toItem:self
                                                             attribute:NSLayoutAttributeRight
                                                            multiplier:1
-                                                             constant:-10]
+                                                             constant:-MARGIN]
                                ];
         [self addSubview:_messageLabel];
         [self addConstraints:constraints];
@@ -143,7 +173,7 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)updateConstraints {
     // adjust the top constraint according to detected statusbarheight
-    _topConstraint.constant = 10 + [self statusBarHeight];
+    _topConstraint.constant = MARGIN + [self statusBarHeight];
 
     // adjust title/message space according to values set
     _spacerConstraint.constant = [self spacerHeight];
@@ -155,7 +185,7 @@ static inline BOOL IsEmpty(id thing) {
 }
 
 - (CGFloat)spacerHeight {
-    return IsEmpty(_titleLabel.attributedText) ? 0 : 10;
+    return IsEmpty(_titleLabel.attributedText) ? 0 : MARGIN;
 }
 
 - (CGFloat)statusBarHeight {
@@ -175,7 +205,8 @@ static inline BOOL IsEmpty(id thing) {
     return 20;
 }
 
-- (CGSize)intrinsicContentSize {
+- (CGSize)intrinsicContentSize
+{
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
     NSStringDrawingContext* context = [NSStringDrawingContext new];
     CGRect rect = [_messageLabel.text boundingRectWithSize:CGSizeMake(300, CGFLOAT_MAX)
@@ -184,8 +215,11 @@ static inline BOOL IsEmpty(id thing) {
                                                              context:context];
 
     CGFloat messageHeight = rect.size.height;
+    CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
+    if (sliderHeight > 0)
+        sliderHeight += MARGIN;
 
-    CGFloat height = 20 + [self spacerHeight] + titleHeight + messageHeight + [self statusBarHeight];
+    CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight + [self statusBarHeight];
     return CGSizeMake(320, height);
 }
 
@@ -260,6 +294,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (UIView *)viewForAccessory {
     return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationDefaultChevron"]];
+}
+
+- (UIView *)viewForSlideupAccessory {
+    return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationSlideupChevron"]];
 }
 
 - (NSString*)defaultTitleForType:(IIShortNotificationType)type {

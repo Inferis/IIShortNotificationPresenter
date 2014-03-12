@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */; };
+		E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */; };
+		E24BD88E18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */; };
 		E26C371718A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */; };
 		E26C371818A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */; };
 		E2E8381A189E6D2D00D5DE26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E83819189E6D2D00D5DE26 /* Foundation.framework */; };
@@ -42,6 +44,8 @@
 		E228DAB1189FA8CC00A56CC5 /* IIShortNotificationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationView.h; sourceTree = "<group>"; };
 		E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationDefaultView.h; sourceTree = "<group>"; };
 		E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationDefaultView.m; sourceTree = "<group>"; };
+		E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IIShortNotificationSlideUpChevron.png; sourceTree = "<group>"; };
+		E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationSlideUpChevron@2x.png"; sourceTree = "<group>"; };
 		E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IIShortNotificationDefaultChevron.png; sourceTree = "<group>"; };
 		E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationDefaultChevron@2x.png"; sourceTree = "<group>"; };
 		E2E83816189E6D2D00D5DE26 /* NotificationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotificationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +172,8 @@
 		E2E83852189E718500D5DE26 /* IIShortNotificationPresenter */ = {
 			isa = PBXGroup;
 			children = (
+				E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */,
+				E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */,
 				E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */,
 				E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */,
 				E228DAB0189FA87500A56CC5 /* IIShortNotificationPresentation.h */,
@@ -259,6 +265,8 @@
 			files = (
 				E2E83832189E6D2D00D5DE26 /* Images.xcassets in Resources */,
 				E26C371818A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png in Resources */,
+				E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */,
+				E24BD88E18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png in Resources */,
 				E2E83824189E6D2D00D5DE26 /* InfoPlist.strings in Resources */,
 				E2E8382D189E6D2D00D5DE26 /* Main.storyboard in Resources */,
 				E26C371718A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png in Resources */,
