@@ -18,6 +18,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [IIShortNotificationPresenter setDefaultAutoDismissDelay:3];
 }
 
 
