@@ -42,6 +42,7 @@ static inline BOOL IsEmpty(id thing) {
 {
     self = [super init];
     if (self) {
+        self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
         _superview = view;
         _queue = [NSMutableArray array];
     }
@@ -262,7 +263,7 @@ static inline BOOL IsEmpty(id thing) {
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     if (type != IIShortNotificationError) {
-        [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:3];
+        [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:self.autoDismissDelay];
     }
 }
 
@@ -308,6 +309,20 @@ static Class _viewClass;
 
 + (Class)notificationViewClass {
     return _viewClass ?: [IIShortNotificationDefaultView class];
+}
+
+#pragma mark - auto dismiss
+
+static NSTimeInterval _defaultAutoDismissDelay = 5;
+
++ (void)setDefaultAutoDismissDelay:(NSTimeInterval)delay
+{
+    _defaultAutoDismissDelay = delay;
+}
+
++ (NSTimeInterval)defaultAutoDismissDelay
+{
+    return _defaultAutoDismissDelay;
 }
 
 @end
