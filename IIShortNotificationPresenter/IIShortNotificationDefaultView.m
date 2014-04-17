@@ -209,7 +209,7 @@ static inline BOOL IsEmpty(id thing) {
 {
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
     NSStringDrawingContext* context = [NSStringDrawingContext new];
-    CGRect rect = [_messageLabel.text boundingRectWithSize:CGSizeMake(300, CGFLOAT_MAX)
+    CGRect rect = [_messageLabel.text boundingRectWithSize:CGSizeMake(320-MARGIN*2, CGFLOAT_MAX)
                                                              options:NSStringDrawingUsesLineFragmentOrigin
                                                           attributes:@{NSFontAttributeName:_messageLabel.font}
                                                              context:context];
