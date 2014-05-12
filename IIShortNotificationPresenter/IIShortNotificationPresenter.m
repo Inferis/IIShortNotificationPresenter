@@ -59,20 +59,35 @@ static inline BOOL IsEmpty(id thing) {
 
 #pragma mark - Error
 
-- (void)presentError:(NSString *)error
+- (void)presentError:(NSError *)error
 {
     [self presentError:error title:nil completion:nil];
 }
 
-- (void)presentError:(NSString *)error title:(NSString *)title
+- (void)presentErrorMessage:(NSString *)message
+{
+    [self presentErrorMessage:message title:nil completion:nil];
+}
+
+- (void)presentError:(NSError *)error title:(NSString *)title
 {
     [self presentError:error title:title completion:nil];
 }
 
-- (void)presentError:(NSString *)error title:(NSString *)title completion:(void (^)(void))completion
+- (void)presentErrorMessage:(NSString *)message title:(NSString *)title
+{
+    [self presentErrorMessage:message title:title completion:nil];
+}
+
+- (void)presentError:(NSError *)error title:(NSString *)title completion:(void (^)(void))completion
+{
+    [self presentErrorMessage:error.localizedDescription title:title completion:completion];
+}
+
+- (void)presentErrorMessage:(NSString *)message title:(NSString *)title completion:(void (^)(void))completion
 {
     [self queuePresentation:IIShortNotificationError
-                    message:error
+                    message:message
                       title:title
                   accessory:NO
                  completion:completion ? ^(IIShortNotificationDismissal dismissal){ completion(); } : nil];
@@ -339,19 +354,34 @@ static NSTimeInterval _defaultAutoDismissDelay = 5;
     return presenter;
 }
 
-- (void)presentError:(NSString*)error
+- (void)presentError:(NSError *)error
 {
     [[self presenter] presentError:error];
 }
 
-- (void)presentError:(NSString*)error title:(NSString*)title;
+- (void)presentErrorMessage:(NSString *)message
+{
+    [[self presenter] presentErrorMessage:message];
+}
+
+- (void)presentError:(NSError *)error title:(NSString *)title
 {
     [[self presenter] presentError:error title:title];
 }
 
-- (void)presentError:(NSString *)error title:(NSString*)title completion:(void(^)(void))completion
+- (void)presentErrorMessage:(NSString *)message title:(NSString *)title
+{
+    [[self presenter] presentErrorMessage:message title:title];
+}
+
+- (void)presentError:(NSError *)error title:(NSString *)title completion:(void (^)(void))completion
 {
     [[self presenter] presentError:error title:title completion:completion];
+}
+
+- (void)presentErrorMessage:(NSString *)message title:(NSString *)title completion:(void (^)(void))completion
+{
+    [[self presenter] presentErrorMessage:message title:title completion:completion];
 }
 
 - (void)presentConfirmation:(NSString*)confirmation

@@ -36,6 +36,16 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
 @protocol IIShortNotificationPresentation <NSObject>
 
 /**
+ *  Present an error.
+ *  The message does not autodismiss, and has to be dismissed by the user.
+ *
+ *  @note The class implementing this method has the freedom to choose a default title or not presenting the title.
+ *
+ *  @param error An NSString containing the errormessage to display.
+ */
+- (void)presentError:(NSError*)error;
+
+/**
  *  Present an error message.
  *  The message does not autodismiss, and has to be dismissed by the user.
  *
@@ -43,7 +53,16 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
  *
  *  @param error An NSString containing the errormessage to display.
  */
-- (void)presentError:(NSString*)error;
+- (void)presentErrorMessage:(NSString*)message;
+
+/**
+ *  Present an error with a title.
+ *  The message does not autodismiss, and has to be dismissed by the user.
+ *
+ *  @param error An NSString containing the error message to display.
+ *  @param title An NSString containing the error title to display.
+ */
+- (void)presentError:(NSError*)error title:(NSString*)title;
 
 /**
  *  Present an error message with a title.
@@ -52,7 +71,17 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
  *  @param error An NSString containing the error message to display.
  *  @param title An NSString containing the error title to display.
  */
-- (void)presentError:(NSString*)error title:(NSString*)title;
+- (void)presentErrorMessage:(NSString*)message title:(NSString*)title;
+
+/**
+ *  Present an error with a title.
+ *  The message does not autodismiss, and has to be dismissed by the user.
+ *
+ *  @param error      An NSString containing the error message to display.
+ *  @param title      An NSString containing the error title to display.
+ *  @param completion A completion block called when the error is dismissed by the user.
+ */
+- (void)presentError:(NSError *)error title:(NSString*)title completion:(void(^)(void))completion;
 
 /**
  *  Present an error message with a title.
@@ -62,7 +91,7 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
  *  @param title      An NSString containing the error title to display.
  *  @param completion A completion block called when the error is dismissed by the user.
  */
-- (void)presentError:(NSString *)error title:(NSString*)title completion:(void(^)(void))completion;
+- (void)presentErrorMessage:(NSString *)message title:(NSString*)title completion:(void(^)(void))completion;
 
 /**
  *  Present a confirmation message.
