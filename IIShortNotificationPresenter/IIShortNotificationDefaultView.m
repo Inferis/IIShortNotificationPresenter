@@ -297,7 +297,7 @@ static inline BOOL IsEmpty(id thing) {
 }
 
 - (UIView *)viewForSlideupAccessory {
-    return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationSlideupChevron"]];
+    return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationSlideUpChevron"]];
 }
 
 - (NSString*)defaultTitleForType:(IIShortNotificationType)type {
