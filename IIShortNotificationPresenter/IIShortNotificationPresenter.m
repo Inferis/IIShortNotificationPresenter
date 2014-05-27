@@ -274,12 +274,11 @@ static inline BOOL IsEmpty(id thing) {
         _topConstraint.constant = 0;
         [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self];
         if (type != IIShortNotificationError) {
             [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:self.autoDismissDelay];
         }
     }];
-
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
 }
 
