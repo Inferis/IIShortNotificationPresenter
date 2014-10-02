@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21ECC8D19DBE762007AA060 /* IIShortNotificationSerialQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */; };
 		E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */; };
 		E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */; };
 		E24BD88E18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */; };
@@ -40,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationSerialQueue.h; sourceTree = "<group>"; };
+		E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationSerialQueue.m; sourceTree = "<group>"; };
+		E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationQueue.h; sourceTree = "<group>"; };
 		E228DAB0189FA87500A56CC5 /* IIShortNotificationPresentation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationPresentation.h; sourceTree = "<group>"; };
 		E228DAB1189FA8CC00A56CC5 /* IIShortNotificationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationView.h; sourceTree = "<group>"; };
 		E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationDefaultView.h; sourceTree = "<group>"; };
@@ -182,6 +186,9 @@
 				E2E83854189E718500D5DE26 /* IIShortNotificationPresenter.m */,
 				E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */,
 				E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */,
+				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
+				E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */,
+				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
@@ -293,6 +300,7 @@
 				E2E8382A189E6D2D00D5DE26 /* AppDelegate.m in Sources */,
 				E2E83855189E718500D5DE26 /* IIShortNotificationPresenter.m in Sources */,
 				E2E83826189E6D2D00D5DE26 /* main.m in Sources */,
+				E21ECC8D19DBE762007AA060 /* IIShortNotificationSerialQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +431,7 @@
 				GCC_PREFIX_HEADER = "NotificationDemo/NotificationDemo-Prefix.pch";
 				INFOPLIST_FILE = "NotificationDemo/NotificationDemo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -436,6 +445,7 @@
 				GCC_PREFIX_HEADER = "NotificationDemo/NotificationDemo-Prefix.pch";
 				INFOPLIST_FILE = "NotificationDemo/NotificationDemo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

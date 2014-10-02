@@ -6,33 +6,21 @@
 //
 
 #import "IIShortNotificationPresenter.h"
+#import "IIShortNotificationQueue.h"
+#import "IIShortNotificationSerialQueue.h"
 #import "IIShortNotificationDefaultView.h"
 #import <objc/runtime.h>
 
-// Blatantly picked up from [Wil Shipley](http://blog.wilshipley.com/2005/10/pimp-my-code-interlude-free-code.html)
-//
-// > Essentially, if you're wondering if an NSString or NSData or
-// > NSAttributedString or NSArray or NSSet has actual useful data in
-// > it, this is your macro. Instead of checking things like
-// > `if (inputString == nil || [inputString length] == 0)` you just
-// > say, "if (IsEmpty(inputString))".
-//
-// It rocks.
-static inline BOOL IsEmpty(id thing) {
-    if (thing == nil) return YES;
-    if ([thing isEqual:[NSNull null]]) return YES;
-    if ([thing respondsToSelector:@selector(count)]) return [thing performSelector:@selector(count)] == 0;
-    if ([thing respondsToSelector:@selector(length)]) return [thing performSelector:@selector(length)] == 0;
-    return NO;
-}
+@interface IIShortNotificationPresenter () <IIShortNotificationQueueHandler>
+
+@end
 
 @implementation IIShortNotificationPresenter {
     UIView<IIShortNotificationView>* _notificationView;
     UIView* _overlayView;
+    id<IIShortNotificationQueue> _queue;
     __weak NSLayoutConstraint* _topConstraint;
     __weak UIView* _superview;
-    NSMutableArray* _queue;
-    BOOL _presenting;
     BOOL _accessory;
     void (^_completion)(IIShortNotificationDismissal dismissal);
     BOOL _allowUserDismissal;
@@ -43,8 +31,8 @@ static inline BOOL IsEmpty(id thing) {
     self = [super init];
     if (self) {
         self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
+        _queue = [[[[self class] notificationQueueClass] alloc] initWithHandler:self];
         _superview = view;
-        _queue = [NSMutableArray array];
     }
     return self;
 }
@@ -124,41 +112,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)queuePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accessory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
 {
-    if (IsEmpty(message) && IsEmpty(title))
-        return;
-
-    NSMutableDictionary* msg = [@{@"type": @(type)} mutableCopy];
-    if (message) msg[@"message"] = message;
-    if (title) msg[@"title"] = title;
-    if (accessory) msg[@"accessory"] = @YES;
-    if (completion) msg[@"completion"] = completion;
-
-    [_queue insertObject:msg atIndex:0];
-    [self handleQueue];
+    [_queue queuePresentation:type message:message title:title accessory:accessory completion:completion];
 }
 
-- (void)handleQueue
-{
-    if (_presenting)
-        return;
-
-    NSDictionary* msg = [_queue lastObject];
-    [_queue removeLastObject];
-    if (msg) {
-        [self present:[msg[@"type"] unsignedIntegerValue]
-              message:msg[@"message"]
-                title:msg[@"title"]
-             accesory:[msg[@"accessory"] boolValue]
-           completion:msg[@"completion"]];
-    }
-    else {
-        [_overlayView removeFromSuperview];
-        _overlayView = nil;
-        _notificationView = nil;
-    }
-}
-
-- (void)present:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accesory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
+- (void)handlePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accesory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
 {
     if (!_overlayView) {
         _overlayView = [UIView new];
@@ -251,7 +208,6 @@ static inline BOOL IsEmpty(id thing) {
     _topConstraint.constant = -_notificationView.intrinsicContentSize.height;
     [_overlayView layoutIfNeeded];
 
-    _presenting = YES;
     _accessory = accessory;
     _completion = [completion copy];
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
@@ -267,7 +223,15 @@ static inline BOOL IsEmpty(id thing) {
     }
 }
 
-- (void)autoDismiss {
+- (void)handlePresentationsFinished
+{
+    [_overlayView removeFromSuperview];
+    _overlayView = nil;
+    _notificationView = nil;
+}
+
+- (void)autoDismiss
+{
     [self dismiss:IIShortNotificationAutomaticDismissal];
 }
 
@@ -280,8 +244,7 @@ static inline BOOL IsEmpty(id thing) {
         if (_completion) _completion(dismissal);
         _completion = nil;
         _accessory = NO;
-        _presenting = NO;
-        [self handleQueue];
+        [_queue dismissedPresentation];
     }];
 }
 
@@ -309,6 +272,18 @@ static Class _viewClass;
 
 + (Class)notificationViewClass {
     return _viewClass ?: [IIShortNotificationDefaultView class];
+}
+
+#pragma mark - View class
+
+static Class _queueClass;
+
++ (void)setNotificationQueueClass:(Class)queueClass {
+    _queueClass = queueClass;
+}
+
++ (Class)notificationQueueClass {
+    return _queueClass ?: [IIShortNotificationSerialQueue class];
 }
 
 #pragma mark - auto dismiss
