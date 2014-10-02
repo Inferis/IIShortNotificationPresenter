@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21122EE19DD6239002F419D /* IIShortNotificationConcurrentQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */; };
 		E21ECC8D19DBE762007AA060 /* IIShortNotificationSerialQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */; };
 		E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */; };
 		E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */; };
@@ -41,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationConcurrentQueue.h; sourceTree = "<group>"; };
+		E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationConcurrentQueue.m; sourceTree = "<group>"; };
 		E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IIShortNotificationPresenter+Internal.h"; sourceTree = "<group>"; };
 		E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationSerialQueue.h; sourceTree = "<group>"; };
 		E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationSerialQueue.m; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
 				E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */,
 				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
+				E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */,
+				E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */,
 				E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */,
 			);
 			name = IIShortNotificationPresenter;
@@ -298,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */,
+				E21122EE19DD6239002F419D /* IIShortNotificationConcurrentQueue.m in Sources */,
 				E2E83830189E6D2D00D5DE26 /* ViewController.m in Sources */,
 				E2E8382A189E6D2D00D5DE26 /* AppDelegate.m in Sources */,
 				E2E83855189E718500D5DE26 /* IIShortNotificationPresenter.m in Sources */,
