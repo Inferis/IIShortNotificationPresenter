@@ -8,6 +8,8 @@
 #import "IIShortNotificationSerialQueue.h"
 #import "IIShortNotificationDefaultView.h"
 #import "IIShortNotificationViewInstance.h"
+#import "IIShortNotificationLayout.h"
+#import "IIShortNotificationTopLayout.h"
 #import <objc/runtime.h>
 
 @interface IIShortNotificationPresenter () <IIShortNotificationQueueHandler>
@@ -19,6 +21,7 @@
     NSMutableArray *_usedNotificationViews;
     UIView* _overlayView;
     id<IIShortNotificationQueue> _queue;
+    id<IIShortNotificationLayout> _layout;
     __weak NSLayoutConstraint* _topConstraint;
     __weak UIView* _superview;
     BOOL _allowUserDismissal;
@@ -30,6 +33,7 @@
     if (self) {
         self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
         _queue = [[[[self class] notificationQueueClass] alloc] initWithHandler:self];
+        _layout = [[[[self class] notificationLayoutClass] alloc] init];
         _superview = view;
         _freeNotificationViews = [NSMutableArray array];
         _usedNotificationViews = [NSMutableArray array];
@@ -310,7 +314,7 @@ static Class _viewClass;
     return _viewClass ?: [IIShortNotificationDefaultView class];
 }
 
-#pragma mark - View class
+#pragma mark - Queue class
 
 static Class _queueClass;
 
@@ -321,6 +325,19 @@ static Class _queueClass;
 + (Class)notificationQueueClass {
     return _queueClass ?: [IIShortNotificationSerialQueue class];
 }
+
+#pragma mark - Layout class
+
+static Class _layoutClass;
+
++ (void)setNotificationLayoutClass:(Class)viewClass {
+    _layoutClass = viewClass;
+}
+
++ (Class)notificationLayoutClass {
+    return _layoutClass ?: [IIShortNotificationTopLayout class];
+}
+
 
 #pragma mark - auto dismiss
 

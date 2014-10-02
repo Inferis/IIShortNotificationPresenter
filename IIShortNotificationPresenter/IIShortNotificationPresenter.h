@@ -29,6 +29,23 @@
 + (void)setNotificationViewClass:(Class)viewClass;
 
 /**
+ *  Set the class of the queue to use when presenting a notification.
+ *  This class should implement the IIShortNotificationQueue protocol.
+ *
+ *  @param viewClass The class of the queue to use to handle presentation order.
+ */
++ (void)setNotificationQueueClass:(Class)queueClass;
+
+/**
+ *  Set the class of the object to handle the placement of the notifications.
+ *  This class should implement the IIShortNotificationView protocol.
+ *
+ *  @param viewClass The class of the view to use to present a notification.
+ */
++ (void)setNotificationLayoutClass:(Class)layoutClass;
+
+
+/**
  *  Sets the default autodismiss delay. This value will be used to set
  *  the initial value for each IIShortNotificationPresenter instance's autoDismissDelay
  *  property.
@@ -42,14 +59,6 @@
  *  @return the current default delay (in seconds).
  */
 + (NSTimeInterval)defaultAutoDismissDelay;
-
-/**
- *  Set the class of the queue to use when presenting a notification.
- *  This class should implement the IIShortNotificationView protocol.
- *
- *  @param viewClass The class of the view to use to present a notification.
- */
-+ (void)setNotificationQueueClass:(Class)queueClass;
 
 /**
  *  Initializes this presenter to present notifications on a certain view.

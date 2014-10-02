@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E21122EE19DD6239002F419D /* IIShortNotificationConcurrentQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */; };
 		E21122F219DD7D86002F419D /* IIShortNotificationViewInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */; };
+		E21122F519DD9494002F419D /* IIShortNotificationTopLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E21122F419DD9494002F419D /* IIShortNotificationTopLayout.m */; };
 		E21ECC8D19DBE762007AA060 /* IIShortNotificationSerialQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */; };
 		E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */; };
 		E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */; };
@@ -45,9 +46,12 @@
 /* Begin PBXFileReference section */
 		E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationConcurrentQueue.h; sourceTree = "<group>"; };
 		E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationConcurrentQueue.m; sourceTree = "<group>"; };
-		E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IIShortNotificationPresenter+Internal.h"; sourceTree = "<group>"; };
+		E21122EF19DD62F9002F419D /* IIShortNotificationPresentation+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IIShortNotificationPresentation+Internal.h"; sourceTree = "<group>"; };
 		E21122F019DD7D86002F419D /* IIShortNotificationViewInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationViewInstance.h; sourceTree = "<group>"; };
 		E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationViewInstance.m; sourceTree = "<group>"; };
+		E21122F319DD9494002F419D /* IIShortNotificationTopLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationTopLayout.h; sourceTree = "<group>"; };
+		E21122F419DD9494002F419D /* IIShortNotificationTopLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationTopLayout.m; sourceTree = "<group>"; };
+		E21122F619DD94A6002F419D /* IIShortNotificationLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationLayout.h; sourceTree = "<group>"; };
 		E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationSerialQueue.h; sourceTree = "<group>"; };
 		E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationSerialQueue.m; sourceTree = "<group>"; };
 		E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationQueue.h; sourceTree = "<group>"; };
@@ -191,6 +195,8 @@
 				E228DAB1189FA8CC00A56CC5 /* IIShortNotificationView.h */,
 				E2E83853189E718500D5DE26 /* IIShortNotificationPresenter.h */,
 				E2E83854189E718500D5DE26 /* IIShortNotificationPresenter.m */,
+				E21122F019DD7D86002F419D /* IIShortNotificationViewInstance.h */,
+				E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */,
 				E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */,
 				E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */,
 				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
@@ -198,9 +204,10 @@
 				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
 				E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */,
 				E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */,
-				E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */,
-				E21122F019DD7D86002F419D /* IIShortNotificationViewInstance.h */,
-				E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */,
+				E21122EF19DD62F9002F419D /* IIShortNotificationPresentation+Internal.h */,
+				E21122F619DD94A6002F419D /* IIShortNotificationLayout.h */,
+				E21122F319DD9494002F419D /* IIShortNotificationTopLayout.h */,
+				E21122F419DD9494002F419D /* IIShortNotificationTopLayout.m */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
@@ -313,6 +320,7 @@
 				E2E8382A189E6D2D00D5DE26 /* AppDelegate.m in Sources */,
 				E2E83855189E718500D5DE26 /* IIShortNotificationPresenter.m in Sources */,
 				E2E83826189E6D2D00D5DE26 /* main.m in Sources */,
+				E21122F519DD9494002F419D /* IIShortNotificationTopLayout.m in Sources */,
 				E21ECC8D19DBE762007AA060 /* IIShortNotificationSerialQueue.m in Sources */,
 				E21122F219DD7D86002F419D /* IIShortNotificationViewInstance.m in Sources */,
 			);
