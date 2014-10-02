@@ -179,11 +179,10 @@
         [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
     }];
-//
-//    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-//    if (type != IIShortNotificationError) {
-//        [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:self.autoDismissDelay];
-//    }
+
+    if (type != IIShortNotificationError) {
+        [self performSelector:@selector(autoDismiss:) withObject:instance afterDelay:self.autoDismissDelay];
+    }
 }
 
 - (void)handlePresentationsFinished
@@ -193,9 +192,9 @@
     }
 }
 
-- (void)autoDismiss
+- (void)autoDismiss:(IIShortNotificationViewInstance*)instance
 {
-    [self dismiss:IIShortNotificationAutomaticDismissal];
+    [self dismiss:IIShortNotificationAutomaticDismissal instance:instance];
 }
 
 - (void)dismiss:(IIShortNotificationDismissal)dismissal {
@@ -204,17 +203,19 @@
         topInstance = [_usedNotificationViews firstObject];
         [_usedNotificationViews removeObjectAtIndex:0];
     }
+}
 
-    if (!topInstance) return;
+- (void)dismiss:(IIShortNotificationDismissal)dismissal instance:(IIShortNotificationViewInstance *)instance {
+    if (!instance) return;
 
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
-        topInstance.view.alpha = 0;
-        topInstance.topConstraint.constant = -topInstance.view.intrinsicContentSize.height;
+        instance.view.alpha = 0;
+        instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
         [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
-        if (topInstance.completion) topInstance.completion(dismissal);
+        if (instance.completion) instance.completion(dismissal);
         @synchronized(_freeNotificationViews) {
-            [_freeNotificationViews addObject:topInstance];
+            [_freeNotificationViews addObject:instance];
         }
         [_queue dismissedPresentation];
     }];
@@ -287,10 +288,10 @@
     if (!topInstance) return;
 
     if (topInstance.accessory & CGRectContainsPoint(topInstance.view.bounds, [tapper locationInView:topInstance.view])) {
-        [self dismiss:IIShortNotificationUserAccessoryDismissal];
+        [self dismiss:IIShortNotificationUserAccessoryDismissal instance:topInstance];
     }
     else
-        [self dismiss:IIShortNotificationUserDismissal];
+        [self dismiss:IIShortNotificationUserDismissal instance:topInstance];
 }
 
 - (void)swiped:(UITapGestureRecognizer*)swiper {
