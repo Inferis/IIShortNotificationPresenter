@@ -5,7 +5,7 @@
 
 #import "IIShortNotificationSerialQueue.h"
 #import "IIShortNotificationPresenter.h"
-#import "IIShortNotificationPresenter+Internal.h"
+#import "IIShortNotificationPresentation+Internal.h"
 
 @implementation IIShortNotificationSerialQueue {
     NSMutableArray* _queue;

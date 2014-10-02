@@ -4,7 +4,7 @@
 //
 
 #import "IIShortNotificationConcurrentQueue.h"
-#import "IIShortNotificationPresenter+Internal.h"
+#import "IIShortNotificationPresentation+Internal.h"
 
 @implementation IIShortNotificationConcurrentQueue {
     id<IIShortNotificationQueueHandler> _handler;
