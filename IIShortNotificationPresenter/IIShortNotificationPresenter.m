@@ -7,6 +7,7 @@
 #import "IIShortNotificationQueue.h"
 #import "IIShortNotificationSerialQueue.h"
 #import "IIShortNotificationDefaultView.h"
+#import "IIShortNotificationViewInstance.h"
 #import <objc/runtime.h>
 
 @interface IIShortNotificationPresenter () <IIShortNotificationQueueHandler>
@@ -14,13 +15,12 @@
 @end
 
 @implementation IIShortNotificationPresenter {
-    UIView<IIShortNotificationView>* _notificationView;
+    NSMutableArray *_freeNotificationViews;
+    NSMutableArray *_usedNotificationViews;
     UIView* _overlayView;
     id<IIShortNotificationQueue> _queue;
     __weak NSLayoutConstraint* _topConstraint;
     __weak UIView* _superview;
-    BOOL _accessory;
-    void (^_completion)(IIShortNotificationDismissal dismissal);
     BOOL _allowUserDismissal;
 }
 
@@ -31,6 +31,8 @@
         self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
         _queue = [[[[self class] notificationQueueClass] alloc] initWithHandler:self];
         _superview = view;
+        _freeNotificationViews = [NSMutableArray array];
+        _usedNotificationViews = [NSMutableArray array];
     }
     return self;
 }
@@ -109,7 +111,7 @@
     [_queue queuePresentation:type message:message title:title accessory:accessory completion:completion];
 }
 
-- (void)handlePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accesory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
+- (void)handlePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accessory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
 {
     if (!_overlayView) {
         _overlayView = [UIView new];
@@ -119,6 +121,12 @@
         UITapGestureRecognizer* tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [_overlayView addGestureRecognizer:tapper];
 
+        UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+        swiper.direction = UISwipeGestureRecognizerDirectionUp;
+        [_overlayView addGestureRecognizer:swiper];
+    }
+
+    if (_overlayView.superview != _superview) {
         [_superview addSubview:_overlayView];
         [_superview addConstraints:@[
                                     // top
@@ -154,74 +162,35 @@
                                                                 multiplier:1
                                                                   constant:0],
                                     ]];
+
     }
 
-    if (!_notificationView) {
-        UIView<IIShortNotificationView>* notificationView = [[[self class] notificationViewClass] new];
-        _notificationView = notificationView;
-        _notificationView.translatesAutoresizingMaskIntoConstraints = NO;
-        _notificationView.alpha = 0;
-        [_overlayView addSubview:_notificationView];
+    IIShortNotificationViewInstance *instance = [self dequeueNotificationView];
 
-        UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
-        swiper.direction = UISwipeGestureRecognizerDirectionUp;
-        [_overlayView addGestureRecognizer:swiper];
+    [instance.view setShortNotificationType:type title:title message:message accessoryVisible:accessory];
+    instance.accessory = accessory;
+    instance.completion = [completion copy];
 
-        NSArray* constraints = @[
-                                 // top
-                                 [NSLayoutConstraint constraintWithItem:_notificationView
-                                                              attribute:NSLayoutAttributeTop
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeTop
-                                                             multiplier:1
-                                                               constant:0],
-                                 // left
-                                 [NSLayoutConstraint constraintWithItem:_notificationView
-                                                              attribute:NSLayoutAttributeLeft
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeLeft
-                                                             multiplier:1
-                                                               constant:0],
-                                 // right
-                                 [NSLayoutConstraint constraintWithItem:_notificationView
-                                                              attribute:NSLayoutAttributeRight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeRight
-                                                             multiplier:1
-                                                               constant:0],
-                                 ];
-        _topConstraint = [constraints firstObject];
-        [_overlayView addConstraints:constraints];
-    }
-
-    _notificationView.alpha = 0;
-    [_notificationView setShortNotificationType:type title:title message:message accessoryVisible:accessory];
-    _topConstraint.constant = -_notificationView.intrinsicContentSize.height;
+    instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
     [_overlayView layoutIfNeeded];
-
-    _accessory = accessory;
-    _completion = [completion copy];
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
-        _notificationView.alpha = 1;
-        _topConstraint.constant = 0;
+        instance.view.alpha = 1;
+        instance.topConstraint.constant = 0;
         [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
     }];
-
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    if (type != IIShortNotificationError) {
-        [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:self.autoDismissDelay];
-    }
+//
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+//    if (type != IIShortNotificationError) {
+//        [self performSelector:@selector(autoDismiss) withObject:nil afterDelay:self.autoDismissDelay];
+//    }
 }
 
 - (void)handlePresentationsFinished
 {
-    [_overlayView removeFromSuperview];
-    _overlayView = nil;
-    _notificationView = nil;
+    @synchronized(_freeNotificationViews) {
+        [_overlayView removeFromSuperview];
+    }
 }
 
 - (void)autoDismiss
@@ -230,22 +199,94 @@
 }
 
 - (void)dismiss:(IIShortNotificationDismissal)dismissal {
+    IIShortNotificationViewInstance *topInstance;
+    @synchronized(_usedNotificationViews) {
+        topInstance = [_usedNotificationViews firstObject];
+        [_usedNotificationViews removeObjectAtIndex:0];
+    }
+
+    if (!topInstance) return;
+
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
-        _notificationView.alpha = 0;
-        _topConstraint.constant = -_notificationView.intrinsicContentSize.height;
+        topInstance.view.alpha = 0;
+        topInstance.topConstraint.constant = -topInstance.view.intrinsicContentSize.height;
         [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
-        if (_completion) _completion(dismissal);
-        _completion = nil;
-        _accessory = NO;
+        if (topInstance.completion) topInstance.completion(dismissal);
+        @synchronized(_freeNotificationViews) {
+            [_freeNotificationViews addObject:topInstance];
+        }
         [_queue dismissedPresentation];
     }];
+}
+
+#pragma mark - notification views
+
+- (IIShortNotificationViewInstance*)dequeueNotificationView {
+    IIShortNotificationViewInstance *instance = nil;
+    @synchronized(_freeNotificationViews) {
+        instance = [_freeNotificationViews lastObject];
+        if (instance) {
+            [_freeNotificationViews removeLastObject];
+        }
+    }
+
+    if (!instance) {
+        instance = [IIShortNotificationViewInstance new];
+        instance.view = [[[self class] notificationViewClass] new];
+        instance.view.translatesAutoresizingMaskIntoConstraints = NO;
+        [_overlayView addSubview:instance.view];
+
+        NSArray* constraints = @[
+                                 // top
+                                 [NSLayoutConstraint constraintWithItem:instance.view
+                                                              attribute:NSLayoutAttributeTop
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:_overlayView
+                                                              attribute:NSLayoutAttributeTop
+                                                             multiplier:1
+                                                               constant:0],
+                                 // left
+                                 [NSLayoutConstraint constraintWithItem:instance.view
+                                                              attribute:NSLayoutAttributeLeft
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:_overlayView
+                                                              attribute:NSLayoutAttributeLeft
+                                                             multiplier:1
+                                                               constant:0],
+                                 // right
+                                 [NSLayoutConstraint constraintWithItem:instance.view
+                                                              attribute:NSLayoutAttributeRight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:_overlayView
+                                                              attribute:NSLayoutAttributeRight
+                                                             multiplier:1
+                                                               constant:0],
+                                 ];
+        
+        instance.constraints = constraints;
+        [_overlayView addConstraints:constraints];
+    }
+
+    [_overlayView sendSubviewToBack:instance.view];
+    instance.view.alpha = 0;
+    @synchronized(_usedNotificationViews) {
+        [_usedNotificationViews addObject:instance];
+    }
+    return instance;
 }
 
 #pragma mark - dismissing tap
 
 - (void)tapped:(UITapGestureRecognizer*)tapper {
-    if (_accessory & CGRectContainsPoint(_notificationView.bounds, [tapper locationInView:_notificationView])) {
+    IIShortNotificationViewInstance *topInstance;
+    @synchronized(_usedNotificationViews) {
+        topInstance = [_usedNotificationViews firstObject];
+    }
+
+    if (!topInstance) return;
+
+    if (topInstance.accessory & CGRectContainsPoint(topInstance.view.bounds, [tapper locationInView:topInstance.view])) {
         [self dismiss:IIShortNotificationUserAccessoryDismissal];
     }
     else
