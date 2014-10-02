@@ -24,7 +24,6 @@
     id<IIShortNotificationLayout> _layout;
     __weak NSLayoutConstraint* _topConstraint;
     __weak UIView* _superview;
-    BOOL _allowUserDismissal;
 }
 
 - (id)initWithContainerView:(UIView *)view
