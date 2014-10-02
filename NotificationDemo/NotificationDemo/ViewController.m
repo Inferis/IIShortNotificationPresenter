@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "IIShortNotificationPresenter.h"
+#import "IIShortNotificationConcurrentQueue.h"
 
 @interface ViewController ()
 
@@ -19,6 +20,16 @@
 {
     [super viewDidLoad];
     [IIShortNotificationPresenter setDefaultAutoDismissDelay:3];
+    [IIShortNotificationPresenter setNotificationQueueClass:[IIShortNotificationConcurrentQueue class]];
+}
+
+
+- (IBAction)pressedBurst:(UIButton*)sender {
+    NSUInteger count = 1 + arc4random() % 4;
+    [self presentNotification:[NSString stringWithFormat:@"Sending a burst of %lu notifications.", count]];
+    for (NSUInteger i=0; i<count; ++i) {
+        [self pressedError:sender];
+    }
 }
 
 
