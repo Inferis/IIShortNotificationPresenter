@@ -41,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IIShortNotificationPresenter+Internal.h"; sourceTree = "<group>"; };
 		E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationSerialQueue.h; sourceTree = "<group>"; };
 		E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationSerialQueue.m; sourceTree = "<group>"; };
 		E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationQueue.h; sourceTree = "<group>"; };
@@ -189,6 +190,7 @@
 				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
 				E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */,
 				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
+				E21122EF19DD62F9002F419D /* IIShortNotificationPresenter+Internal.h */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
