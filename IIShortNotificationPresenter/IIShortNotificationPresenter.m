@@ -35,10 +35,6 @@
     return self;
 }
 
-- (UIView<IIShortNotificationView> *)presenterView {
-    return _notificationView;
-}
-
 - (UIView *)containerView {
     return _superview;
 }

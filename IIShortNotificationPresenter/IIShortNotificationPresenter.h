@@ -17,7 +17,6 @@
 
 @interface IIShortNotificationPresenter : NSObject <IIShortNotificationPresentation>
 
-@property (nonatomic, weak, readonly) UIView<IIShortNotificationView>* presenterView;
 @property (nonatomic, weak, readonly) UIView* containerView;
 @property (nonatomic, assign) NSTimeInterval autoDismissDelay;
 
