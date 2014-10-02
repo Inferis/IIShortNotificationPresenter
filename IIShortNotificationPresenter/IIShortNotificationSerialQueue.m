@@ -55,7 +55,7 @@
         [_presenter handlePresentation:[msg[@"type"] unsignedIntegerValue]
                                message:msg[@"message"]
                                  title:msg[@"title"]
-                              accesory:[msg[@"accessory"] boolValue]
+                             accessory:[msg[@"accessory"] boolValue]
                             completion:msg[@"completion"]];
     }
     else {

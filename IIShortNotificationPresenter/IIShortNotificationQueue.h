@@ -12,7 +12,7 @@
 @protocol IIShortNotificationQueue <NSObject>
 
 @required
-- (instancetype)initWithHandler:(id<IIShortNotificationQueueHandler>)presenter;
+- (instancetype)initWithHandler:(id<IIShortNotificationQueueHandler>)handler;
 - (void)queuePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accessory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion;
 - (void)dismissedPresentation;
 
@@ -21,7 +21,7 @@
 @protocol IIShortNotificationQueueHandler <NSObject>
 
 @required
-- (void)handlePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accesory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion;
+- (void)handlePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accessory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion;
 - (void)handlePresentationsFinished;
 
 @end
