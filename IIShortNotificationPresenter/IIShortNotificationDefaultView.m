@@ -175,15 +175,38 @@ static inline BOOL IsEmpty(id thing) {
     return IsEmpty(_titleLabel.attributedText) ? 0 : MARGIN;
 }
 
+- (void)layoutSubviews
+{
+    NSLayoutConstraint *labelAsWideAsPossibleConstraint = [NSLayoutConstraint constraintWithItem:_messageLabel
+                                                                                       attribute:NSLayoutAttributeWidth
+                                                                                       relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                                          toItem:nil
+                                                                                       attribute:0
+                                                                                      multiplier:1.0
+                                                                                        constant:1e8]; // a big number
+    labelAsWideAsPossibleConstraint.priority = [_messageLabel contentCompressionResistancePriorityForAxis:UILayoutConstraintAxisHorizontal];
+    [_messageLabel addConstraint:labelAsWideAsPossibleConstraint];
+
+    [super layoutSubviews];
+
+    CGFloat availableLabelWidth = _messageLabel.frame.size.width;
+    _messageLabel.preferredMaxLayoutWidth = availableLabelWidth;
+    [_messageLabel removeConstraint:labelAsWideAsPossibleConstraint];
+
+    [super layoutSubviews];
+}
+
+
 - (CGSize)intrinsicContentSize
 {
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
     CGFloat width = _messageLabel.preferredMaxLayoutWidth;
     if (width == 0) {
-        width = self.superview.bounds.size.width - MARGIN*2;
+        [self layoutSubviews];
+        width = _messageLabel.preferredMaxLayoutWidth;
     }
 
-    _messageLabel.preferredMaxLayoutWidth = [[UIScreen mainScreen] applicationFrame].size.width;
+    _messageLabel.preferredMaxLayoutWidth = width;
     CGFloat messageHeight = [_messageLabel systemLayoutSizeFittingSize:CGSizeMake(_messageLabel.preferredMaxLayoutWidth-MARGIN*2, UILayoutFittingExpandedSize.height)].height;
 
     CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
@@ -191,7 +214,7 @@ static inline BOOL IsEmpty(id thing) {
         sliderHeight += MARGIN;
 
     CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight;
-    return CGSizeMake(width, height);
+    return CGSizeMake(width+MARGIN*2, height);
 }
 
 - (void)setError:(NSString *)error {
