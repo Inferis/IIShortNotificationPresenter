@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "IIShortNotificationLayout.h"
 
-@interface IIShortNotificationSideLayout : NSObject <IIShortNotificationLayout>
+@interface IIShortNotificationRightSideLayout : NSObject <IIShortNotificationLayout>
 
 @property (nonatomic, assign) CGFloat spacing;
 

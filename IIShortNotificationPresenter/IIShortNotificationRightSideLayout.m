@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Tom Adriaenssen. All rights reserved.
 //
 
-#import "IIShortNotificationSideLayout.h"
+#import "IIShortNotificationRightSideLayout.h"
 #import "IIShortNotificationPresentation+Internal.h"
 #import <objc/runtime.h>
 
@@ -20,7 +20,7 @@
 @end
 
 
-@implementation IIShortNotificationSideLayout {
+@implementation IIShortNotificationRightSideLayout {
     id<IIShortNotificationLayoutContext> _layoutContext;
 }
 
