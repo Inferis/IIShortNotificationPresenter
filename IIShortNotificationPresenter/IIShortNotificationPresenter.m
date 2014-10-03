@@ -187,7 +187,13 @@
     [_layout beginPresentAnimation:instance];
     [_overlayView sendSubviewToBack:instance.view];
     [_overlayView layoutIfNeeded];
-    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+
+    CGFloat duration = -1;
+    if ([_layout respondsToSelector:@selector(presentingAnimationDuration)]) {
+        duration = [_layout presentingAnimationDuration];
+    }
+    if (duration < 0) duration = 0.6;
+    [UIView animateWithDuration:duration delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endPresentAnimation:instance];
         [_overlayView layoutIfNeeded];
         instance.view.alpha = 1;
@@ -226,7 +232,13 @@
 
     [_layout beginDismissAnimation:instance];
     [_overlayView layoutIfNeeded];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+
+    CGFloat duration = -1;
+    if ([_layout respondsToSelector:@selector(dismissingAnimationDuration)]) {
+        duration = [_layout dismissingAnimationDuration];
+    }
+    if (duration < 0) duration = 0.2;
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endDismissAnimation:instance];
         [_overlayView layoutIfNeeded];
         instance.view.alpha = 0;
@@ -234,9 +246,20 @@
         @synchronized(_usedNotificationViews) {
             [_usedNotificationViews removeObject:instance];
         }
-        [UIView animateWithDuration:0.3 animations:^{
+
+        CGFloat duration = -1;
+        if ([_layout respondsToSelector:@selector(removingAnimationDuration)]) {
+            duration = [_layout removingAnimationDuration];
+        }
+        if (duration < 0) duration = 0.2;
+        if (duration == 0) { // don't animate
             [_layout removeInstance:instance];
-        }];
+        }
+        else {
+            [UIView animateWithDuration:duration animations:^{
+                [_layout removeInstance:instance];
+            }];
+        }
         @synchronized(_freeNotificationViews) {
             [_freeNotificationViews addObject:instance];
         }

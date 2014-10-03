@@ -13,6 +13,12 @@
 
 @protocol IIShortNotificationLayout <NSObject>
 
+@optional
+
+- (CGFloat)presentingAnimationDuration;
+- (CGFloat)dismissingAnimationDuration;
+- (CGFloat)removingAnimationDuration;
+
 @required
 - (instancetype)initWithLayoutContext:(id<IIShortNotificationLayoutContext>)layoutContext;
 
