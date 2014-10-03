@@ -43,6 +43,7 @@ static NSUInteger _limit = 30;
 - (void)dismissedPresentation
 {
     @synchronized(_queue) {
+        if (_presenting == 0) return;
         --_presenting;
     }
 
