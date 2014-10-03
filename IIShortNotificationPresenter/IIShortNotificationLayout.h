@@ -11,6 +11,7 @@
 
 @protocol IIShortNotificationLayout <NSObject>
 
+@required
 - (instancetype)initWithContainerView:(UIView *)containerView;
 
 - (void)addInstance:(IIShortNotificationViewInstance*)instance;
