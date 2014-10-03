@@ -17,9 +17,7 @@ static inline BOOL IsEmpty(id thing) {
 
 @implementation IIShortNotificationDefaultView {
     UILabel *_messageLabel, *_titleLabel;
-    NSLayoutConstraint* _topConstraint;
     NSLayoutConstraint* _spacerConstraint;
-    NSLayoutConstraint* _accessoryTopConstraint;
     UIView* _accessoryView;
     UIView* _slideupView;
 }
@@ -66,7 +64,6 @@ static inline BOOL IsEmpty(id thing) {
         [self addSubview:_accessoryView];
         [self addConstraints:constraints];
         [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
-        _accessoryTopConstraint = [constraints firstObject];
     }
 
     if (!_slideupView) {
@@ -128,7 +125,6 @@ static inline BOOL IsEmpty(id thing) {
                                  ];
         [self addSubview:_titleLabel];
         [self addConstraints:constraints];
-        _topConstraint = [constraints firstObject];
     }
 
     if (!_messageLabel) {
@@ -169,9 +165,6 @@ static inline BOOL IsEmpty(id thing) {
 }
 
 - (void)updateConstraints {
-    // adjust the top constraint according to detected statusbarheight
-    _topConstraint.constant = MARGIN;
-
     // adjust title/message space according to values set
     _spacerConstraint.constant = [self spacerHeight];
 
