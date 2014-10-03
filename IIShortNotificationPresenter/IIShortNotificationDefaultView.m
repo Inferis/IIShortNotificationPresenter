@@ -170,13 +170,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)updateConstraints {
     // adjust the top constraint according to detected statusbarheight
-    _topConstraint.constant = MARGIN + [self statusBarHeight];
+    _topConstraint.constant = MARGIN;
 
     // adjust title/message space according to values set
     _spacerConstraint.constant = [self spacerHeight];
-
-    // adjust accessory vertical offset according to statusbarheigt
-    _accessoryTopConstraint.constant = [self statusBarHeight]/2;
 
     [super updateConstraints];
 }
@@ -185,39 +182,23 @@ static inline BOOL IsEmpty(id thing) {
     return IsEmpty(_titleLabel.attributedText) ? 0 : MARGIN;
 }
 
-- (CGFloat)statusBarHeight {
-    UIView* sv = [self superview];
-    UIView* psv = nil;
-    while (sv) {
-        CGFloat diff = CGRectGetHeight(psv.bounds) > 0 ? (CGRectGetHeight(sv.bounds) - CGRectGetHeight(psv.bounds)) : 0;
-        if (diff > 0) {
-            return 0;
-        }
-        if ([sv isKindOfClass:NSClassFromString(@"UIViewControllerWrapperView")]) {
-            return UIInterfaceOrientationIsPortrait([[UIDevice currentDevice] orientation]) ? 52 : 64;
-        }
-        psv = sv;
-        sv = [sv superview];
-    }
-    return 20;
-}
-
 - (CGSize)intrinsicContentSize
 {
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
-    NSStringDrawingContext* context = [NSStringDrawingContext new];
-    CGRect rect = [_messageLabel.text boundingRectWithSize:CGSizeMake(320-MARGIN*2, CGFLOAT_MAX)
-                                                             options:NSStringDrawingUsesLineFragmentOrigin
-                                                          attributes:@{NSFontAttributeName:_messageLabel.font}
-                                                             context:context];
+    CGFloat width = _messageLabel.preferredMaxLayoutWidth;
+    if (width == 0) {
+        width = self.superview.bounds.size.width - MARGIN*2;
+    }
 
-    CGFloat messageHeight = rect.size.height;
+    _messageLabel.preferredMaxLayoutWidth = [[UIScreen mainScreen] applicationFrame].size.width;
+    CGFloat messageHeight = [_messageLabel systemLayoutSizeFittingSize:CGSizeMake(_messageLabel.preferredMaxLayoutWidth-MARGIN*2, UILayoutFittingExpandedSize.height)].height;
+
     CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
     if (sliderHeight > 0)
         sliderHeight += MARGIN;
 
-    CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight + [self statusBarHeight];
-    return CGSizeMake(320, height);
+    CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight;
+    return CGSizeMake(width, height);
 }
 
 - (void)setError:(NSString *)error {
