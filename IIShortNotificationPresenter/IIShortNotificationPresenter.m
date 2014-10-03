@@ -218,12 +218,6 @@
     [self dismiss:IIShortNotificationAutomaticDismissal instance:instance];
 }
 
-- (void)dismiss:(IIShortNotificationDismissal)dismissal {
-    IIShortNotificationViewInstance *topInstance;
-    @synchronized(_usedNotificationViews) {
-        topInstance = [_usedNotificationViews firstObject];
-    }
-}
 
 - (void)dismiss:(IIShortNotificationDismissal)dismissal instance:(IIShortNotificationViewInstance *)instance {
     if (!instance) return;
@@ -312,7 +306,14 @@
 }
 
 - (void)swiped:(UITapGestureRecognizer*)swiper {
-    [self dismiss:IIShortNotificationUserDismissal];
+    IIShortNotificationViewInstance *topInstance;
+    @synchronized(_usedNotificationViews) {
+        topInstance = [_usedNotificationViews firstObject];
+    }
+
+    if (!topInstance) return;
+
+    [self dismiss:IIShortNotificationUserDismissal instance:topInstance];
 }
 
 #pragma mark - View class
