@@ -19,3 +19,22 @@ static inline BOOL IsEmpty(id thing) {
     if ([thing respondsToSelector:@selector(length)]) return [thing performSelector:@selector(length)] == 0;
     return NO;
 }
+
+
+static inline CGFloat IIStatusBarHeight(UIView *view) {
+    UIView* sv = [view superview];
+    UIView* psv = nil;
+    while (sv) {
+        CGFloat diff = CGRectGetHeight(psv.bounds) > 0 ? (CGRectGetHeight(sv.bounds) - CGRectGetHeight(psv.bounds)) : 0;
+        if (diff > 0) {
+            return 0;
+        }
+        if ([sv isKindOfClass:NSClassFromString(@"UIViewControllerWrapperView")]) {
+            CGFloat height = UIInterfaceOrientationIsPortrait([[UIDevice currentDevice] orientation]) ? 64 : 52;
+            return height;
+        }
+        psv = sv;
+        sv = [sv superview];
+    }
+    return 20;
+}

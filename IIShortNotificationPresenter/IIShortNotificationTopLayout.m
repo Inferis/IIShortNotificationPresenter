@@ -63,8 +63,8 @@
 
 - (void)endPresentAnimation:(IIShortNotificationViewInstance*)instance;
 {
-    instance.topConstraint.constant = [self statusBarHeight];
     [_containerView layoutIfNeeded];
+    instance.topConstraint.constant = IIStatusBarHeight(_layoutContainer.containerView);
 }
 
 - (void)beginDismissAnimation:(IIShortNotificationViewInstance*)instance;
@@ -83,23 +83,7 @@
 
 }
 
-- (CGFloat)statusBarHeight {
-    UIView* sv = [_containerView superview];
-    UIView* psv = nil;
-    while (sv) {
-        CGFloat diff = CGRectGetHeight(psv.bounds) > 0 ? (CGRectGetHeight(sv.bounds) - CGRectGetHeight(psv.bounds)) : 0;
-        if (diff > 0) {
-            return 0;
-        }
-        if ([sv isKindOfClass:NSClassFromString(@"UIViewControllerWrapperView")]) {
-            CGFloat height = UIInterfaceOrientationIsPortrait([[UIDevice currentDevice] orientation]) ? 64 : 52;
-            return height;
-        }
-        psv = sv;
-        sv = [sv superview];
-    }
-    return 20;
-}
+
 
 @end
 
