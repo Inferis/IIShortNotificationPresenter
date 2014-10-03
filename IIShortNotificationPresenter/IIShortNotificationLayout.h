@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "IIShortNotificationViewInstance.h"
 
+@protocol IIShortNotificationLayoutContext;
+
 @protocol IIShortNotificationLayout <NSObject>
 
 @required
-- (instancetype)initWithContainerView:(UIView *)containerView;
+- (instancetype)initWithLayoutContext:(id<IIShortNotificationLayoutContext>)layoutContext;
 
 - (void)addInstance:(IIShortNotificationViewInstance*)instance;
 
@@ -23,5 +25,13 @@
 - (void)endDismissAnimation:(IIShortNotificationViewInstance*)instance;
 
 - (void)removeInstance:(IIShortNotificationViewInstance*)instance;
+
+@end
+
+@protocol IIShortNotificationLayoutContext <NSObject>
+
+- (UIView*)containerView;
+- (IIShortNotificationViewInstance*)previousNotificationInstance:(IIShortNotificationViewInstance*)instance;
+- (IIShortNotificationViewInstance*)nextNotificationInstance:(IIShortNotificationViewInstance*)instance;
 
 @end
