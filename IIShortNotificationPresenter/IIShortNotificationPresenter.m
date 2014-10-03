@@ -176,7 +176,7 @@
 
     [_layout beginPresentAnimation:instance];
     [_overlayView sendSubviewToBack:instance.view];
-    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
+    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endPresentAnimation:instance];
         instance.view.alpha = 1;
     } completion:^(BOOL finished) {
@@ -216,7 +216,7 @@
         [_usedNotificationViews removeObject:instance];
     }
     [_layout beginDismissAnimation:instance];
-    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
+    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endDismissAnimation:instance];
         instance.view.alpha = 0;
     } completion:^(BOOL finished) {
