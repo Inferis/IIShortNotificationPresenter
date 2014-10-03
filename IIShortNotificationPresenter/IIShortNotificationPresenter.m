@@ -292,18 +292,28 @@
 #pragma mark - dismissing tap
 
 - (void)tapped:(UITapGestureRecognizer*)tapper {
-    IIShortNotificationViewInstance *topInstance;
+    IIShortNotificationViewInstance *tappedInstance;
+    BOOL viewTapped = NO;
+
     @synchronized(_usedNotificationViews) {
-        topInstance = [_usedNotificationViews firstObject];
+        for (IIShortNotificationViewInstance* instance in _usedNotificationViews) {
+            if (CGRectContainsPoint(instance.view.bounds, [tapper locationInView:instance.view])) {
+                tappedInstance = instance;
+                viewTapped = YES;
+                break;
+            }
+        }
+
+        tappedInstance = tappedInstance ?: [_usedNotificationViews firstObject];
     }
 
-    if (!topInstance) return;
+    if (!tappedInstance) return;
 
-    if (topInstance.accessory & CGRectContainsPoint(topInstance.view.bounds, [tapper locationInView:topInstance.view])) {
-        [self dismiss:IIShortNotificationUserAccessoryDismissal instance:topInstance];
+    if (tappedInstance.accessory & viewTapped) {
+        [self dismiss:IIShortNotificationUserAccessoryDismissal instance:tappedInstance];
     }
     else
-        [self dismiss:IIShortNotificationUserDismissal instance:topInstance];
+        [self dismiss:IIShortNotificationUserDismissal instance:tappedInstance];
 }
 
 - (void)swiped:(UITapGestureRecognizer*)swiper {
