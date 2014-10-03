@@ -8,6 +8,11 @@
 
 #import "IIShortNotificationTopLayout.h"
 #import "IIShortNotificationViewInstance.h"
+@interface IIShortNotificationViewInstance (IIShortNotificationTopLayout)
+
+- (NSLayoutConstraint *)topConstraint;
+
+@end
 
 @implementation IIShortNotificationTopLayout {
     UIView* _containerView;
