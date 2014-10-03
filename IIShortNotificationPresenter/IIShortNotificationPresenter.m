@@ -186,8 +186,10 @@
 
     [_layout beginPresentAnimation:instance];
     [_overlayView sendSubviewToBack:instance.view];
+    [_overlayView layoutIfNeeded];
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endPresentAnimation:instance];
+        [_overlayView layoutIfNeeded];
         instance.view.alpha = 1;
     } completion:^(BOOL finished) {
     }];
@@ -222,20 +224,24 @@
     // don't dismiss non active instances
     if (![_usedNotificationViews containsObject:instance]) return;
 
-    @synchronized(_usedNotificationViews) {
-        [_usedNotificationViews removeObject:instance];
-    }
     [_layout beginDismissAnimation:instance];
-    [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+    [_overlayView layoutIfNeeded];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         [_layout endDismissAnimation:instance];
+        [_overlayView layoutIfNeeded];
         instance.view.alpha = 0;
     } completion:^(BOOL finished) {
-        if (instance.completion) instance.completion(dismissal);
-        [_layout removeInstance:instance];
+        @synchronized(_usedNotificationViews) {
+            [_usedNotificationViews removeObject:instance];
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            [_layout removeInstance:instance];
+        }];
         @synchronized(_freeNotificationViews) {
             [_freeNotificationViews addObject:instance];
         }
         [_queue dismissedPresentation];
+        if (instance.completion) instance.completion(dismissal);
     }];
 }
 
