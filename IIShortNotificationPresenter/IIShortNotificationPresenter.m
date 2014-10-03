@@ -22,7 +22,6 @@
     UIView* _overlayView;
     id<IIShortNotificationQueue> _queue;
     id<IIShortNotificationLayout> _layout;
-    __weak NSLayoutConstraint* _topConstraint;
     __weak UIView* _superview;
 }
 
@@ -32,7 +31,6 @@
     if (self) {
         self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
         _queue = [[[[self class] notificationQueueClass] alloc] initWithHandler:self];
-        _layout = [[[[self class] notificationLayoutClass] alloc] init];
         _superview = view;
         _freeNotificationViews = [NSMutableArray array];
         _usedNotificationViews = [NSMutableArray array];
@@ -121,6 +119,8 @@
         _overlayView.translatesAutoresizingMaskIntoConstraints = NO;
         _overlayView.clipsToBounds = YES;
 
+        _layout = [[[[self class] notificationLayoutClass] alloc] initWithContainerView:_overlayView];
+
         UITapGestureRecognizer* tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [_overlayView addGestureRecognizer:tapper];
 
@@ -174,12 +174,11 @@
     instance.accessory = accessory;
     instance.completion = [completion copy];
 
-    instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
-    [_overlayView layoutIfNeeded];
+    [_layout beginPresentAnimation:instance];
+    [_overlayView sendSubviewToBack:instance.view];
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
+        [_layout endPresentAnimation:instance];
         instance.view.alpha = 1;
-        instance.topConstraint.constant = 0;
-        [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
     }];
 
@@ -204,19 +203,24 @@
     IIShortNotificationViewInstance *topInstance;
     @synchronized(_usedNotificationViews) {
         topInstance = [_usedNotificationViews firstObject];
-        [_usedNotificationViews removeObjectAtIndex:0];
     }
 }
 
 - (void)dismiss:(IIShortNotificationDismissal)dismissal instance:(IIShortNotificationViewInstance *)instance {
     if (!instance) return;
+    // don't dismiss non active instances
+    if (![_usedNotificationViews containsObject:instance]) return;
 
+    @synchronized(_usedNotificationViews) {
+        [_usedNotificationViews removeObject:instance];
+    }
+    [_layout beginDismissAnimation:instance];
     [UIView animateWithDuration:0.6 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.6 options:0 animations:^{
+        [_layout endDismissAnimation:instance];
         instance.view.alpha = 0;
-        instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
-        [_overlayView layoutIfNeeded];
     } completion:^(BOOL finished) {
         if (instance.completion) instance.completion(dismissal);
+        [_layout removeInstance:instance];
         @synchronized(_freeNotificationViews) {
             [_freeNotificationViews addObject:instance];
         }
@@ -240,39 +244,9 @@
         instance.view = [[[self class] notificationViewClass] new];
         instance.view.translatesAutoresizingMaskIntoConstraints = NO;
         [_overlayView addSubview:instance.view];
-
-        NSArray* constraints = @[
-                                 // top
-                                 [NSLayoutConstraint constraintWithItem:instance.view
-                                                              attribute:NSLayoutAttributeTop
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeTop
-                                                             multiplier:1
-                                                               constant:0],
-                                 // left
-                                 [NSLayoutConstraint constraintWithItem:instance.view
-                                                              attribute:NSLayoutAttributeLeft
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeLeft
-                                                             multiplier:1
-                                                               constant:0],
-                                 // right
-                                 [NSLayoutConstraint constraintWithItem:instance.view
-                                                              attribute:NSLayoutAttributeRight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_overlayView
-                                                              attribute:NSLayoutAttributeRight
-                                                             multiplier:1
-                                                               constant:0],
-                                 ];
-        
-        instance.constraints = constraints;
-        [_overlayView addConstraints:constraints];
+        [_layout addInstance:instance];
     }
 
-    [_overlayView sendSubviewToBack:instance.view];
     instance.view.alpha = 0;
     @synchronized(_usedNotificationViews) {
         [_usedNotificationViews addObject:instance];

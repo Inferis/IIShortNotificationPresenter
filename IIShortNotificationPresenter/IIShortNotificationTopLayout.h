@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IIShortNotificationLayout.h"
 
-@interface IIShortNotificationTopLayout : NSObject
+@interface IIShortNotificationTopLayout : NSObject<IIShortNotificationLayout>
+
 
 @end
