@@ -17,14 +17,14 @@
 @end
 
 @implementation IIShortNotificationTopLayout {
-    UIView* _containerView;
+    id<IIShortNotificationLayoutContext> _layoutContainer;
 }
 
-- (instancetype)initWithContainerView:(UIView *)containerView
+- (instancetype)initWithLayoutContext:(id<IIShortNotificationLayoutContext>)layoutContainer
 {
     self = [super init];
     if (self) {
-        _containerView = containerView;
+        _layoutContainer = layoutContainer;
     }
     return self;
 }
@@ -36,7 +36,7 @@
                              [NSLayoutConstraint constraintWithItem:instance.view
                                                           attribute:NSLayoutAttributeTop
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:_containerView
+                                                             toItem:_layoutContainer.containerView
                                                           attribute:NSLayoutAttributeTop
                                                          multiplier:1
                                                            constant:0],
@@ -44,7 +44,7 @@
                              [NSLayoutConstraint constraintWithItem:instance.view
                                                           attribute:NSLayoutAttributeLeft
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:_containerView
+                                                             toItem:_layoutContainer.containerView
                                                           attribute:NSLayoutAttributeLeft
                                                          multiplier:1
                                                            constant:0],
@@ -52,25 +52,23 @@
                              [NSLayoutConstraint constraintWithItem:instance.view
                                                           attribute:NSLayoutAttributeRight
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:_containerView
+                                                             toItem:_layoutContainer.containerView
                                                           attribute:NSLayoutAttributeRight
                                                          multiplier:1
                                                            constant:0],
                              ];
     instance.constraints = constraints;
-    [_containerView addSubview:instance.view];
-    [_containerView addConstraints:constraints];
+    [_layoutContainer.containerView addSubview:instance.view];
+    [_layoutContainer.containerView addConstraints:constraints];
 }
 
 - (void)beginPresentAnimation:(IIShortNotificationViewInstance*)instance;
 {
     instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
-    [_containerView layoutIfNeeded];
 }
 
 - (void)endPresentAnimation:(IIShortNotificationViewInstance*)instance;
 {
-    [_containerView layoutIfNeeded];
     instance.topConstraint.constant = IIStatusBarHeight(_layoutContainer.containerView);
 }
 
@@ -82,7 +80,6 @@
 - (void)endDismissAnimation:(IIShortNotificationViewInstance*)instance;
 {
     instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
-    [_containerView layoutIfNeeded];
 }
 
 - (void)removeInstance:(IIShortNotificationViewInstance*)instance;
