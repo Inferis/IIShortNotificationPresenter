@@ -224,6 +224,7 @@
     // don't dismiss non active instances
     if (![_usedNotificationViews containsObject:instance]) return;
 
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismiss:) object:instance];
     [_layout beginDismissAnimation:instance];
     [_overlayView layoutIfNeeded];
 
