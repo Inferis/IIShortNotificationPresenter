@@ -183,6 +183,7 @@
     }];
 
     if (type != IIShortNotificationError) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismiss:) object:instance];
         [self performSelector:@selector(autoDismiss:) withObject:instance afterDelay:self.autoDismissDelay];
     }
 }
