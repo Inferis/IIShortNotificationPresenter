@@ -40,14 +40,14 @@
 - (IBAction)pressedError:(UIButton*)sender {
     switch (arc4random() % 3) {
         case 0:
-            [self presentError:@"Only a message"];
+            [self presentErrorMessage:@"Only a message"];
             break;
         case 1:
-            [self presentError:@"This error has a title too." title:@"Woah there"];
+            [self presentErrorMessage:@"This error has a title too." title:@"Woah there"];
             break;
         case 2:
             sender.alpha = 0.5;
-            [self presentError:@"A message, a title and a callback. This is pretty long.\n\nEven multiline." title:@"Awesomeness" completion:^{
+            [self presentErrorMessage:@"A message, a title and a callback. This is pretty long.\n\nEven multiline." title:@"Awesomeness" completion:^{
                 sender.alpha = 1;
             }];
             break;
