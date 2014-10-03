@@ -84,3 +84,12 @@
 }
 
 @end
+
+@implementation IIShortNotificationViewInstance (IIShortNotificationTopLayout)
+
+- (NSLayoutConstraint *)topConstraint
+{
+    return [self.constraints firstObject];
+}
+
+@end

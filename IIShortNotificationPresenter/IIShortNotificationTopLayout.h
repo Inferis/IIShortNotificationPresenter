@@ -13,3 +13,9 @@
 
 
 @end
+
+@interface IIShortNotificationViewInstance (IIShortNotificationTopLayout)
+
+- (NSLayoutConstraint *)topConstraint;
+
+@end

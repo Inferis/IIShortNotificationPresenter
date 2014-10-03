@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class IIShortNotificationViewInstance;
+#import "IIShortNotificationViewInstance.h"
 
 @protocol IIShortNotificationLayout <NSObject>
 

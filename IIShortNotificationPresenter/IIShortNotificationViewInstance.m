@@ -10,9 +10,4 @@
 
 @implementation IIShortNotificationViewInstance
 
-- (NSLayoutConstraint *)topConstraint
-{
-    return [self.constraints firstObject];
-}
-
 @end

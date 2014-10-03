@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) UIView<IIShortNotificationView>* view;
 @property (nonatomic, strong) NSArray* constraints;
-@property (nonatomic, strong, readonly) NSLayoutConstraint *topConstraint;
 @property (nonatomic, assign) BOOL accessory;
 @property (nonatomic, copy) void (^completion)(IIShortNotificationDismissal dismissal);
 
