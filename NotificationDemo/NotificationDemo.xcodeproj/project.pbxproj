@@ -110,6 +110,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E21122F719DE78B2002F419D /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				E21122F019DD7D86002F419D /* IIShortNotificationViewInstance.h */,
+				E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */,
+				E21122F619DD94A6002F419D /* IIShortNotificationLayout.h */,
+				E21122F319DD9494002F419D /* IIShortNotificationTopLayout.h */,
+				E21122F419DD9494002F419D /* IIShortNotificationTopLayout.m */,
+			);
+			name = Layout;
+			sourceTree = "<group>";
+		};
+		E21122F819DE78BD002F419D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */,
+				E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */,
+				E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */,
+				E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		E21122F919DE78F4002F419D /* Queues */ = {
+			isa = PBXGroup;
+			children = (
+				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
+				E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */,
+				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
+				E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */,
+				E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */,
+			);
+			name = Queues;
+			sourceTree = "<group>";
+		};
+		E21122FA19DE791A002F419D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E228DAB1189FA8CC00A56CC5 /* IIShortNotificationView.h */,
+				E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */,
+				E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		E2E8380D189E6D2D00D5DE26 = {
 			isa = PBXGroup;
 			children = (
@@ -187,27 +232,14 @@
 		E2E83852189E718500D5DE26 /* IIShortNotificationPresenter */ = {
 			isa = PBXGroup;
 			children = (
-				E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */,
-				E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */,
-				E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */,
-				E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */,
+				E21122F819DE78BD002F419D /* Resources */,
 				E228DAB0189FA87500A56CC5 /* IIShortNotificationPresentation.h */,
-				E228DAB1189FA8CC00A56CC5 /* IIShortNotificationView.h */,
 				E2E83853189E718500D5DE26 /* IIShortNotificationPresenter.h */,
 				E2E83854189E718500D5DE26 /* IIShortNotificationPresenter.m */,
-				E21122F019DD7D86002F419D /* IIShortNotificationViewInstance.h */,
-				E21122F119DD7D86002F419D /* IIShortNotificationViewInstance.m */,
-				E228DAB2189FA93000A56CC5 /* IIShortNotificationDefaultView.h */,
-				E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */,
-				E21ECC8E19DBE7C1007AA060 /* IIShortNotificationQueue.h */,
-				E21ECC8B19DBE762007AA060 /* IIShortNotificationSerialQueue.h */,
-				E21ECC8C19DBE762007AA060 /* IIShortNotificationSerialQueue.m */,
-				E21122EC19DD6239002F419D /* IIShortNotificationConcurrentQueue.h */,
-				E21122ED19DD6239002F419D /* IIShortNotificationConcurrentQueue.m */,
+				E21122FA19DE791A002F419D /* Views */,
+				E21122F719DE78B2002F419D /* Layout */,
+				E21122F919DE78F4002F419D /* Queues */,
 				E21122EF19DD62F9002F419D /* IIShortNotificationPresentation+Internal.h */,
-				E21122F619DD94A6002F419D /* IIShortNotificationLayout.h */,
-				E21122F319DD9494002F419D /* IIShortNotificationTopLayout.h */,
-				E21122F419DD9494002F419D /* IIShortNotificationTopLayout.m */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
