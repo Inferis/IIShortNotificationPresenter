@@ -16,11 +16,20 @@
 
 @end
 
+@interface IIShortNotificationPresenterLayoutContext : NSObject <IIShortNotificationLayoutContext>
+
+- (instancetype)initWithPresenter:(IIShortNotificationPresenter*)presenter;
+
+@end
+
 @implementation IIShortNotificationPresenter {
-    NSMutableArray *_freeNotificationViews;
+    @public
     NSMutableArray *_usedNotificationViews;
     UIView* _overlayView;
+    @private
+    NSMutableArray *_freeNotificationViews;
     id<IIShortNotificationQueue> _queue;
+    IIShortNotificationPresenterLayoutContext *_layoutContainer;
     id<IIShortNotificationLayout> _layout;
     __weak UIView* _superview;
 }
@@ -119,7 +128,8 @@
         _overlayView.translatesAutoresizingMaskIntoConstraints = NO;
         _overlayView.clipsToBounds = YES;
 
-        _layout = [[[[self class] notificationLayoutClass] alloc] initWithContainerView:_overlayView];
+        _layoutContainer = [[IIShortNotificationPresenterLayoutContext alloc] initWithPresenter:self];
+        _layout = [[[[self class] notificationLayoutClass] alloc] initWithLayoutContext:_layoutContainer];
 
         UITapGestureRecognizer* tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [_overlayView addGestureRecognizer:tapper];
@@ -385,5 +395,65 @@ static NSTimeInterval _defaultAutoDismissDelay = 5;
 {
     [[self presenter] presentNotification:notification title:title accessory:accessory completion:completion];
 }
+
+@end
+
+@implementation IIShortNotificationPresenterLayoutContext {
+    IIShortNotificationPresenter *_presenter;
+}
+
+- (instancetype)initWithPresenter:(IIShortNotificationPresenter *)presenter
+{
+    self = [super init];
+    if (self) {
+        _presenter = presenter;
+    }
+    return self;
+}
+
+- (UIView *)containerView
+{
+    return _presenter->_overlayView;
+}
+
+- (IIShortNotificationViewInstance*)previousNotificationInstance:(IIShortNotificationViewInstance*)instance;
+{
+    return [self previousNotificationInstance:instance in:_presenter->_usedNotificationViews];
+}
+
+- (IIShortNotificationViewInstance*)nextNotificationInstance:(IIShortNotificationViewInstance*)instance;
+{
+    return [self nextNotificationInstance:instance in:_presenter->_usedNotificationViews];
+}
+
+- (IIShortNotificationViewInstance*)previousNotificationInstance:(IIShortNotificationViewInstance*)instance in:(NSArray*)instances
+{
+    BOOL next = NO;
+    for (IIShortNotificationViewInstance *other in [instances reverseObjectEnumerator]) {
+        if (next) {
+            return other;
+        }
+
+        if (other == instance) {
+            next = YES;
+        }
+    }
+
+    return nil;
+}
+
+- (IIShortNotificationViewInstance*)nextNotificationInstance:(IIShortNotificationViewInstance*)instance in:(NSArray*)instances
+{
+    IIShortNotificationViewInstance *last = nil;
+    for (IIShortNotificationViewInstance *other in [instances reverseObjectEnumerator]) {
+        if (other == instance) {
+            return last;
+        }
+        last = other;
+    }
+
+    return nil;
+}
+
 
 @end
