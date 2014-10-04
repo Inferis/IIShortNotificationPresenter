@@ -59,12 +59,14 @@ static inline BOOL IsEmpty(id thing) {
                                                                  toItem:self
                                                               attribute:NSLayoutAttributeRight
                                                              multiplier:1
-                                                               constant:-MARGIN]
+                                                               constant:-MARGIN],
                                  ];
 
         [self addSubview:_accessoryView];
         [self addConstraints:constraints];
         _accessoryViewRightConstraint = [constraints lastObject];
+        [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
+        [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisVertical];
         [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
     }
 
@@ -201,16 +203,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (CGSize)intrinsicContentSize
 {
+    [self layoutSubviews];
     CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
-    CGFloat width = _messageLabel.preferredMaxLayoutWidth;
-    if (width == 0) {
-        [self layoutSubviews];
-        width = _messageLabel.preferredMaxLayoutWidth;
-    }
-
-    _messageLabel.preferredMaxLayoutWidth = width;
     CGSize desired = [_messageLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
-    width = desired.width + MARGIN*2;
+    CGFloat width = desired.width + MARGIN*2;
     CGFloat messageHeight = desired.height;
 
     CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
