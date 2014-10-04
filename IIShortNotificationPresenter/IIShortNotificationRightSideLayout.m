@@ -14,14 +14,12 @@
 
 - (NSLayoutConstraint *)sideConstraint;
 
-@property (nonatomic, strong) NSLayoutConstraint *attachmentConstraint;
-@property (nonatomic, strong) IIShortNotificationViewInstance *nextInstance;
-
 @end
-
 
 @implementation IIShortNotificationRightSideLayout {
     id<IIShortNotificationLayoutContext> _layoutContext;
+    NSMutableArray *_attachmentConstraints;
+    NSMutableArray *_instances;
 }
 
 - (instancetype)initWithLayoutContext:(id<IIShortNotificationLayoutContext>)layoutContext
@@ -30,6 +28,8 @@
     if (self) {
         _layoutContext = layoutContext;
         _spacing = 10;
+        _instances = [NSMutableArray new];
+        _attachmentConstraints = [NSMutableArray new];
         _notificationWidth = 260;
     }
     return self;
@@ -38,7 +38,7 @@
 - (void)addInstance:(IIShortNotificationViewInstance*)instance
 {
     NSArray* constraints = @[
-                             // right
+                             // side
                              [NSLayoutConstraint constraintWithItem:instance.view
                                                           attribute:NSLayoutAttributeRight
                                                           relatedBy:NSLayoutRelationEqual
@@ -56,19 +56,21 @@
                                                            constant:_notificationWidth],
                              ];
     instance.constraints = constraints;
-    [_layoutContext.containerView addSubview:instance.view];
     [_layoutContext.containerView addConstraints:constraints];
+    [_layoutContext.containerView setNeedsUpdateConstraints];
 }
 
 - (void)beginPresentAnimation:(IIShortNotificationViewInstance*)instance
 {
-    [self attachToPrevious:instance];
+    [_instances addObject:instance];
     instance.sideConstraint.constant = instance.view.intrinsicContentSize.width;
+    [self rebuildAttachments];
 }
 
 - (void)endPresentAnimation:(IIShortNotificationViewInstance*)instance
 {
     instance.sideConstraint.constant = -self.spacing;
+    [_layoutContext.containerView setNeedsUpdateConstraints];
 }
 
 - (void)beginDismissAnimation:(IIShortNotificationViewInstance*)instance
@@ -78,52 +80,39 @@
 - (void)endDismissAnimation:(IIShortNotificationViewInstance*)instance
 {
     instance.sideConstraint.constant = instance.view.intrinsicContentSize.width;
-    instance.nextInstance = [_layoutContext nextNotificationInstance:instance];
+    [_layoutContext.containerView setNeedsUpdateConstraints];
 }
 
 - (void)removeInstance:(IIShortNotificationViewInstance*)instance
 {
-    [self detach:instance];
-    if (instance.nextInstance) {
-        [self attachToPrevious:instance.nextInstance];
-        instance.nextInstance = nil;
-        [_layoutContext.containerView layoutIfNeeded];
-    }
+    [_instances removeObject:instance];
+    [self rebuildAttachments];
 }
 
-- (void)attachToPrevious:(IIShortNotificationViewInstance*)instance {
-    UIView *relativeView = [_layoutContext previousNotificationInstance:instance].view;
-    NSLayoutAttribute relativeAttribute = NSLayoutAttributeBottom;
-    CGFloat relativeConstant = 0;
+- (void)rebuildAttachments {
+    [_layoutContext.containerView removeConstraints:_attachmentConstraints];
+    [_attachmentConstraints removeAllObjects];
 
-    if (!relativeView) {
-        relativeView = _layoutContext.containerView;
-        relativeAttribute = NSLayoutAttributeTop;
-        relativeConstant = IIStatusBarHeight(_layoutContext.containerView);
+    UIView *relativeView = _layoutContext.containerView;
+    NSLayoutAttribute relativeAttribute = NSLayoutAttributeTop;
+    CGFloat relativeConstant = IIStatusBarHeight(_layoutContext.containerView);
+    for (IIShortNotificationViewInstance *instance in _instances) {
+        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:instance.view
+                                                                      attribute:NSLayoutAttributeTop
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:relativeView
+                                                                      attribute:relativeAttribute
+                                                                     multiplier:1
+                                                                       constant:relativeConstant  + self.spacing];
+        [_attachmentConstraints addObject:constraint];
+        relativeAttribute = NSLayoutAttributeBottom;
+        relativeView = instance.view;
+        relativeConstant = 0;
     }
 
-    // right
-    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:instance.view
-                                                                  attribute:NSLayoutAttributeTop
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:relativeView
-                                                                  attribute:relativeAttribute
-                                                                 multiplier:1
-                                                                   constant:relativeConstant  + self.spacing];
-    [self detach:instance];
-    [instance setAttachmentConstraint:constraint];
-    [_layoutContext.containerView addConstraint:constraint];
+    [_layoutContext.containerView addConstraints:_attachmentConstraints];
     [_layoutContext.containerView setNeedsUpdateConstraints];
-}
-
-- (void)detach:(IIShortNotificationViewInstance*)instance
-{
-    NSLayoutConstraint *existing = instance.attachmentConstraint;
-    if (existing) {
-        [_layoutContext.containerView removeConstraint:existing];
-        [_layoutContext.containerView setNeedsUpdateConstraints];
-    }
-    instance.attachmentConstraint = nil;
+    [_layoutContext.containerView setNeedsLayout];
 }
 
 @end
@@ -143,29 +132,5 @@
     return [self.constraints firstObject];
 }
 
-- (void)setAttachmentConstraint:(NSLayoutConstraint *)attachmentConstraint
-{
-    NSMutableArray *constraints = [self.constraints mutableCopy];
-    BOOL changed = NO;
-    NSLayoutConstraint *existing = self.attachmentConstraint;
-    if (existing) {
-        [constraints removeObject:existing];
-        changed = YES;
-    }
-    if (attachmentConstraint) {
-        [constraints addObject:attachmentConstraint];
-        changed = YES;
-    }
-    if (changed) {
-        self.constraints = [constraints copy];
-    }
-}
-
-- (NSLayoutConstraint *)attachmentConstraint {
-    if (self.constraints.count > 2) {
-        return [self.constraints lastObject];
-    }
-    return nil;
-}
 
 @end
