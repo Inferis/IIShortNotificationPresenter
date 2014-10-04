@@ -27,7 +27,6 @@
     NSMutableArray *_usedNotificationViews;
     UIView* _overlayView;
     @private
-    NSMutableArray *_freeNotificationViews;
     IIShortNotificationConfiguration *_configuration;
     id<IIShortNotificationQueue> _queue;
     IIShortNotificationPresenterLayoutContext *_layoutContainer;
@@ -43,7 +42,6 @@
         self.autoDismissDelay = _configuration.autoDismissDelay;
         _queue = [_configuration queueWithHandler:self];
         _superview = view;
-        _freeNotificationViews = [NSMutableArray array];
         _usedNotificationViews = [NSMutableArray array];
     }
     return self;
@@ -216,6 +214,7 @@ IIShortNotificationConfiguration *_defaultConfiguration;
 
     [_overlayView sendSubviewToBack:instance.view];
     [_layout beginPresentAnimation:instance];
+    [_overlayView setNeedsLayout];
     [_overlayView layoutIfNeeded];
 
     CGFloat duration = -1;
@@ -238,9 +237,7 @@ IIShortNotificationConfiguration *_defaultConfiguration;
 
 - (void)handlePresentationsFinished
 {
-    @synchronized(_freeNotificationViews) {
-        [_overlayView removeFromSuperview];
-    }
+    [_overlayView removeFromSuperview];
 }
 
 - (void)autoDismiss:(IIShortNotificationViewInstance*)instance
@@ -279,14 +276,16 @@ IIShortNotificationConfiguration *_defaultConfiguration;
         if (duration < 0) duration = 0.2;
         if (duration == 0) { // don't animate
             [_layout removeInstance:instance];
+            [_overlayView layoutIfNeeded];
+            [instance.view removeFromSuperview];
         }
         else {
             [UIView animateWithDuration:duration animations:^{
                 [_layout removeInstance:instance];
+                [_overlayView layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                [instance.view removeFromSuperview];
             }];
-        }
-        @synchronized(_freeNotificationViews) {
-            [_freeNotificationViews addObject:instance];
         }
         [_queue dismissedPresentation];
         if (instance.completion) instance.completion(dismissal);
@@ -297,20 +296,15 @@ IIShortNotificationConfiguration *_defaultConfiguration;
 
 - (IIShortNotificationViewInstance*)dequeueNotificationView {
     IIShortNotificationViewInstance *instance = nil;
-    @synchronized(_freeNotificationViews) {
-        instance = [_freeNotificationViews lastObject];
-        if (instance) {
-            [_freeNotificationViews removeLastObject];
-        }
-    }
 
     if (!instance) {
         instance = [IIShortNotificationViewInstance new];
         instance.view = [_configuration view];
         instance.view.translatesAutoresizingMaskIntoConstraints = NO;
-        [_layout addInstance:instance];
     }
 
+    [_overlayView addSubview:instance.view];
+    [_layout addInstance:instance];
     instance.view.alpha = 0;
     @synchronized(_usedNotificationViews) {
         [_usedNotificationViews addObject:instance];
