@@ -17,9 +17,10 @@ static inline BOOL IsEmpty(id thing) {
 
 @implementation IIShortNotificationDefaultView {
     UILabel *_messageLabel, *_titleLabel;
-    NSLayoutConstraint* _spacerConstraint;
-    UIView* _accessoryView;
-    UIView* _slideupView;
+    NSLayoutConstraint *_spacerConstraint;
+    NSLayoutConstraint *_accessoryViewRightConstraint;
+    UIView *_accessoryView;
+    UIView *_slideupView;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -63,6 +64,7 @@ static inline BOOL IsEmpty(id thing) {
 
         [self addSubview:_accessoryView];
         [self addConstraints:constraints];
+        _accessoryViewRightConstraint = [constraints lastObject];
         [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
     }
 
@@ -118,7 +120,7 @@ static inline BOOL IsEmpty(id thing) {
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeRight
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
+                                                                 toItem:_accessoryView
                                                               attribute:NSLayoutAttributeRight
                                                              multiplier:1
                                                                constant:-MARGIN]
@@ -152,7 +154,7 @@ static inline BOOL IsEmpty(id thing) {
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeRight
                                                             relatedBy:NSLayoutRelationEqual
-                                                               toItem:self
+                                                               toItem:_accessoryView
                                                             attribute:NSLayoutAttributeRight
                                                            multiplier:1
                                                              constant:-MARGIN]
@@ -167,7 +169,7 @@ static inline BOOL IsEmpty(id thing) {
 - (void)updateConstraints {
     // adjust title/message space according to values set
     _spacerConstraint.constant = [self spacerHeight];
-
+    _accessoryViewRightConstraint.constant = _accessoryView.hidden ? 0 : -MARGIN;
     [super updateConstraints];
 }
 
@@ -207,14 +209,16 @@ static inline BOOL IsEmpty(id thing) {
     }
 
     _messageLabel.preferredMaxLayoutWidth = width;
-    CGFloat messageHeight = [_messageLabel systemLayoutSizeFittingSize:CGSizeMake(_messageLabel.preferredMaxLayoutWidth-MARGIN*2, UILayoutFittingExpandedSize.height)].height;
+    CGSize desired = [_messageLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
+    width = desired.width + MARGIN*2;
+    CGFloat messageHeight = desired.height;
 
     CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
     if (sliderHeight > 0)
         sliderHeight += MARGIN;
 
     CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight;
-    return CGSizeMake(width+MARGIN*2, height);
+    return CGSizeMake(width, height);
 }
 
 - (void)setError:(NSString *)error {
