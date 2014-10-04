@@ -30,6 +30,7 @@
     if (self) {
         _layoutContext = layoutContext;
         _spacing = 10;
+        _notificationWidth = 260;
     }
     return self;
 }
@@ -44,7 +45,7 @@
                                                              toItem:_layoutContext.containerView
                                                           attribute:NSLayoutAttributeRight
                                                          multiplier:1
-                                                           constant:-self.spacing],
+                                                           constant:0],
                              // width
                              [NSLayoutConstraint constraintWithItem:instance.view
                                                           attribute:NSLayoutAttributeWidth
@@ -52,7 +53,7 @@
                                                              toItem:nil
                                                           attribute:NSLayoutAttributeNotAnAttribute
                                                          multiplier:1
-                                                           constant:200],
+                                                           constant:_notificationWidth],
                              ];
     instance.constraints = constraints;
     [_layoutContext.containerView addSubview:instance.view];
