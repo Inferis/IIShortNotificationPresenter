@@ -28,6 +28,7 @@
     UIView* _overlayView;
     @private
     NSMutableArray *_freeNotificationViews;
+    IIShortNotificationConfiguration *_configuration;
     id<IIShortNotificationQueue> _queue;
     IIShortNotificationPresenterLayoutContext *_layoutContainer;
     id<IIShortNotificationLayout> _layout;
@@ -38,8 +39,9 @@
 {
     self = [super init];
     if (self) {
-        self.autoDismissDelay = [[self class] defaultAutoDismissDelay];
-        _queue = [[[[self class] notificationQueueClass] alloc] initWithHandler:self];
+        _configuration = [[self.class defaultConfiguration] copy];
+        self.autoDismissDelay = _configuration.autoDismissDelay;
+        _queue = [_configuration queueWithHandler:self];
         _superview = view;
         _freeNotificationViews = [NSMutableArray array];
         _usedNotificationViews = [NSMutableArray array];
@@ -49,6 +51,19 @@
 
 - (UIView *)containerView {
     return _superview;
+}
+
+#pragma mark - configuration
+
+IIShortNotificationConfiguration *_defaultConfiguration;
+
++ (IIShortNotificationConfiguration *)defaultConfiguration
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _defaultConfiguration = [IIShortNotificationConfiguration new];
+    });
+    return _defaultConfiguration;
 }
 
 #pragma mark - Error
@@ -144,7 +159,7 @@
         _overlayView.clipsToBounds = YES;
 
         _layoutContainer = [[IIShortNotificationPresenterLayoutContext alloc] initWithPresenter:self];
-        _layout = [[[[self class] notificationLayoutClass] alloc] initWithLayoutContext:_layoutContainer];
+        _layout = [_configuration layoutWithContext:_layoutContainer];
 
         UITapGestureRecognizer* tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [_overlayView addGestureRecognizer:tapper];
@@ -199,8 +214,8 @@
     instance.accessory = accessory;
     instance.completion = [completion copy];
 
-    [_layout beginPresentAnimation:instance];
     [_overlayView sendSubviewToBack:instance.view];
+    [_layout beginPresentAnimation:instance];
     [_overlayView layoutIfNeeded];
 
     CGFloat duration = -1;
@@ -291,9 +306,8 @@
 
     if (!instance) {
         instance = [IIShortNotificationViewInstance new];
-        instance.view = [[[self class] notificationViewClass] new];
+        instance.view = [_configuration view];
         instance.view.translatesAutoresizingMaskIntoConstraints = NO;
-        [_overlayView addSubview:instance.view];
         [_layout addInstance:instance];
     }
 
@@ -340,57 +354,6 @@
     if (!topInstance) return;
 
     [self dismiss:IIShortNotificationUserDismissal instance:topInstance];
-}
-
-#pragma mark - View class
-
-static Class _viewClass;
-
-+ (void)setNotificationViewClass:(Class)viewClass {
-    _viewClass = viewClass;
-}
-
-+ (Class)notificationViewClass {
-    return _viewClass ?: [IIShortNotificationDefaultView class];
-}
-
-#pragma mark - Queue class
-
-static Class _queueClass;
-
-+ (void)setNotificationQueueClass:(Class)queueClass {
-    _queueClass = queueClass;
-}
-
-+ (Class)notificationQueueClass {
-    return _queueClass ?: [IIShortNotificationSerialQueue class];
-}
-
-#pragma mark - Layout class
-
-static Class _layoutClass;
-
-+ (void)setNotificationLayoutClass:(Class)viewClass {
-    _layoutClass = viewClass;
-}
-
-+ (Class)notificationLayoutClass {
-    return _layoutClass ?: [IIShortNotificationTopLayout class];
-}
-
-
-#pragma mark - auto dismiss
-
-static NSTimeInterval _defaultAutoDismissDelay = 5;
-
-+ (void)setDefaultAutoDismissDelay:(NSTimeInterval)delay
-{
-    _defaultAutoDismissDelay = delay;
-}
-
-+ (NSTimeInterval)defaultAutoDismissDelay
-{
-    return _defaultAutoDismissDelay;
 }
 
 @end

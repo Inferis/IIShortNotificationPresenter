@@ -20,9 +20,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [IIShortNotificationPresenter setDefaultAutoDismissDelay:3];
-    [IIShortNotificationPresenter setNotificationQueueClass:[IIShortNotificationConcurrentQueue class]];
-    [IIShortNotificationPresenter setNotificationLayoutClass:[IIShortNotificationRightSideLayout class]];
+    [[IIShortNotificationPresenter defaultConfiguration] setAutoDismissDelay:3];
+    [[IIShortNotificationPresenter defaultConfiguration] setNotificationQueueClass:[IIShortNotificationConcurrentQueue class]];
+    [[IIShortNotificationPresenter defaultConfiguration] setNotificationLayoutClass:[IIShortNotificationRightSideLayout class]];
 }
 
 

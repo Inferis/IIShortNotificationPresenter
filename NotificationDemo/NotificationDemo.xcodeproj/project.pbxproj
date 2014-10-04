@@ -17,6 +17,7 @@
 		E24BD88E18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */; };
 		E26C371718A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */; };
 		E26C371818A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */; };
+		E2BAAA9119DF09D200F7A8CC /* IIShortNotificationConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BAAA9019DF09D200F7A8CC /* IIShortNotificationConfiguration.m */; };
 		E2E8381A189E6D2D00D5DE26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E83819189E6D2D00D5DE26 /* Foundation.framework */; };
 		E2E8381C189E6D2D00D5DE26 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E8381B189E6D2D00D5DE26 /* CoreGraphics.framework */; };
 		E2E8381E189E6D2D00D5DE26 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2E8381D189E6D2D00D5DE26 /* UIKit.framework */; };
@@ -66,6 +67,8 @@
 		E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationSlideUpChevron@2x.png"; sourceTree = "<group>"; };
 		E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IIShortNotificationDefaultChevron.png; sourceTree = "<group>"; };
 		E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationDefaultChevron@2x.png"; sourceTree = "<group>"; };
+		E2BAAA8F19DF09D200F7A8CC /* IIShortNotificationConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationConfiguration.h; sourceTree = "<group>"; };
+		E2BAAA9019DF09D200F7A8CC /* IIShortNotificationConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationConfiguration.m; sourceTree = "<group>"; };
 		E2E83816189E6D2D00D5DE26 /* NotificationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotificationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2E83819189E6D2D00D5DE26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E2E8381B189E6D2D00D5DE26 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -245,6 +248,8 @@
 				E21122F719DE78B2002F419D /* Layout */,
 				E21122F919DE78F4002F419D /* Queues */,
 				E21122EF19DD62F9002F419D /* IIShortNotificationPresentation+Internal.h */,
+				E2BAAA8F19DF09D200F7A8CC /* IIShortNotificationConfiguration.h */,
+				E2BAAA9019DF09D200F7A8CC /* IIShortNotificationConfiguration.m */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
@@ -352,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */,
+				E2BAAA9119DF09D200F7A8CC /* IIShortNotificationConfiguration.m in Sources */,
 				E21122EE19DD6239002F419D /* IIShortNotificationConcurrentQueue.m in Sources */,
 				E2E83830189E6D2D00D5DE26 /* ViewController.m in Sources */,
 				E2E8382A189E6D2D00D5DE26 /* AppDelegate.m in Sources */,

@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "IIShortNotificationPresentation.h"
 #import "IIShortNotificationView.h"
+#import "IIShortNotificationConfiguration.h"
 
 /**
  *  This category adds the notification presentation methods to UIViewControllers.
@@ -20,45 +21,7 @@
 @property (nonatomic, weak, readonly) UIView* containerView;
 @property (nonatomic, assign) NSTimeInterval autoDismissDelay;
 
-/**
- *  Set the class of the View to present when presenting a notification.
- *  This class should implement the IIShortNotificationView protocol.
- *
- *  @param viewClass The class of the view to use to present a notification.
- */
-+ (void)setNotificationViewClass:(Class)viewClass;
-
-/**
- *  Set the class of the queue to use when presenting a notification.
- *  This class should implement the IIShortNotificationQueue protocol.
- *
- *  @param viewClass The class of the queue to use to handle presentation order.
- */
-+ (void)setNotificationQueueClass:(Class)queueClass;
-
-/**
- *  Set the class of the object to handle the placement of the notifications.
- *  This class should implement the IIShortNotificationView protocol.
- *
- *  @param viewClass The class of the view to use to present a notification.
- */
-+ (void)setNotificationLayoutClass:(Class)layoutClass;
-
-
-/**
- *  Sets the default autodismiss delay. This value will be used to set
- *  the initial value for each IIShortNotificationPresenter instance's autoDismissDelay
- *  property.
- *
- *  @param delay The default delay to set (in seconds). Should be any value larger than 0.
- */
-+ (void)setDefaultAutoDismissDelay:(NSTimeInterval)delay;
-/**
- *  Returns the default autodismiss delay.
- *
- *  @return the current default delay (in seconds).
- */
-+ (NSTimeInterval)defaultAutoDismissDelay;
++ (IIShortNotificationConfiguration*)defaultConfiguration;
 
 /**
  *  Initializes this presenter to present notifications on a certain view.
