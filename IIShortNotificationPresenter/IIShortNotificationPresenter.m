@@ -162,9 +162,30 @@ IIShortNotificationConfiguration *_defaultConfiguration;
         UITapGestureRecognizer* tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         [_overlayView addGestureRecognizer:tapper];
 
-        UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
-        swiper.direction = UISwipeGestureRecognizerDirectionUp;
-        [_overlayView addGestureRecognizer:swiper];
+        if ([_layout respondsToSelector:@selector(directionsForSwipingDismissal)]) {
+            UISwipeGestureRecognizerDirection directions = [_layout directionsForSwipingDismissal];
+
+            if ((directions & UISwipeGestureRecognizerDirectionUp) > 0) {
+                UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+                swiper.direction = UISwipeGestureRecognizerDirectionUp;
+                [_overlayView addGestureRecognizer:swiper];
+            }
+            if ((directions & UISwipeGestureRecognizerDirectionDown) > 0) {
+                UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+                swiper.direction = UISwipeGestureRecognizerDirectionDown;
+                [_overlayView addGestureRecognizer:swiper];
+            }
+            if ((directions & UISwipeGestureRecognizerDirectionLeft) > 0) {
+                UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+                swiper.direction = UISwipeGestureRecognizerDirectionLeft;
+                [_overlayView addGestureRecognizer:swiper];
+            }
+            if ((directions & UISwipeGestureRecognizerDirectionRight) > 0) {
+                UISwipeGestureRecognizer* swiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
+                swiper.direction = UISwipeGestureRecognizerDirectionRight;
+                [_overlayView addGestureRecognizer:swiper];
+            }
+        }
     }
 
     if (_overlayView.superview != _superview) {

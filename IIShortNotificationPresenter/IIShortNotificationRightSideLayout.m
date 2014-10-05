@@ -35,6 +35,11 @@
     return self;
 }
 
+- (UISwipeGestureRecognizerDirection)directionsForSwipingDismissal
+{
+    return UISwipeGestureRecognizerDirectionRight;
+}
+
 - (void)addInstance:(IIShortNotificationViewInstance*)instance
 {
     NSArray* constraints = @[

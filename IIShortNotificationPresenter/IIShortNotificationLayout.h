@@ -15,6 +15,8 @@
 
 @optional
 
+- (UISwipeGestureRecognizerDirection)directionsForSwipingDismissal;
+
 - (CGFloat)presentingAnimationDuration;
 - (CGFloat)dismissingAnimationDuration;
 - (CGFloat)removingAnimationDuration;
