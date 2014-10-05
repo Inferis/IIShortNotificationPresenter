@@ -30,7 +30,7 @@ static inline CGFloat IIStatusBarHeight(UIView *view) {
             return 0;
         }
         if ([sv isKindOfClass:NSClassFromString(@"UIViewControllerWrapperView")]) {
-            CGFloat height = UIInterfaceOrientationIsPortrait([[UIDevice currentDevice] orientation]) ? 64 : 52;
+            CGFloat height = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) ? 64 : 52;
             return height;
         }
         psv = sv;
