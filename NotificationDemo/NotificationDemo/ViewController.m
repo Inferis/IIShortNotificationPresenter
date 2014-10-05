@@ -10,6 +10,7 @@
 #import "IIShortNotificationPresenter.h"
 #import "IIShortNotificationConcurrentQueue.h"
 #import "IIShortNotificationRightSideLayout.h"
+#import "TestNotificationView.h"
 
 @interface ViewController ()
 
@@ -21,6 +22,7 @@
 {
     [super viewDidLoad];
     [[IIShortNotificationPresenter defaultConfiguration] setAutoDismissDelay:3];
+    [[IIShortNotificationPresenter defaultConfiguration] setNotificationViewClass:[TestNotificationView class]];
     [[IIShortNotificationPresenter defaultConfiguration] setNotificationQueueClass:[IIShortNotificationConcurrentQueue class]];
     [[IIShortNotificationPresenter defaultConfiguration] setNotificationLayoutClass:[IIShortNotificationRightSideLayout class]];
 }

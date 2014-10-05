@@ -15,6 +15,7 @@
 		E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */; };
 		E24BD88D18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */; };
 		E24BD88E18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */; };
+		E2679BFC19E1D1B000A8A19F /* TestNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = E2679BFB19E1D1B000A8A19F /* TestNotificationView.m */; };
 		E26C371718A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */; };
 		E26C371818A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */; };
 		E2BAAA9119DF09D200F7A8CC /* IIShortNotificationConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BAAA9019DF09D200F7A8CC /* IIShortNotificationConfiguration.m */; };
@@ -65,6 +66,8 @@
 		E228DAB3189FA93000A56CC5 /* IIShortNotificationDefaultView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IIShortNotificationDefaultView.m; sourceTree = "<group>"; };
 		E24BD88B18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IIShortNotificationSlideUpChevron.png; sourceTree = "<group>"; };
 		E24BD88C18D0CE2F0057EC42 /* IIShortNotificationSlideUpChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationSlideUpChevron@2x.png"; sourceTree = "<group>"; };
+		E2679BFA19E1D1B000A8A19F /* TestNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestNotificationView.h; sourceTree = "<group>"; };
+		E2679BFB19E1D1B000A8A19F /* TestNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestNotificationView.m; sourceTree = "<group>"; };
 		E26C371518A1335D00B9BEF3 /* IIShortNotificationDefaultChevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IIShortNotificationDefaultChevron.png; sourceTree = "<group>"; };
 		E26C371618A1335D00B9BEF3 /* IIShortNotificationDefaultChevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IIShortNotificationDefaultChevron@2x.png"; sourceTree = "<group>"; };
 		E2BAAA8F19DF09D200F7A8CC /* IIShortNotificationConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IIShortNotificationConfiguration.h; sourceTree = "<group>"; };
@@ -250,6 +253,8 @@
 				E21122EF19DD62F9002F419D /* IIShortNotificationPresentation+Internal.h */,
 				E2BAAA8F19DF09D200F7A8CC /* IIShortNotificationConfiguration.h */,
 				E2BAAA9019DF09D200F7A8CC /* IIShortNotificationConfiguration.m */,
+				E2679BFA19E1D1B000A8A19F /* TestNotificationView.h */,
+				E2679BFB19E1D1B000A8A19F /* TestNotificationView.m */,
 			);
 			name = IIShortNotificationPresenter;
 			path = ../../IIShortNotificationPresenter;
@@ -359,6 +364,7 @@
 				E228DAB4189FA93000A56CC5 /* IIShortNotificationDefaultView.m in Sources */,
 				E2BAAA9119DF09D200F7A8CC /* IIShortNotificationConfiguration.m in Sources */,
 				E21122EE19DD6239002F419D /* IIShortNotificationConcurrentQueue.m in Sources */,
+				E2679BFC19E1D1B000A8A19F /* TestNotificationView.m in Sources */,
 				E2E83830189E6D2D00D5DE26 /* ViewController.m in Sources */,
 				E2E8382A189E6D2D00D5DE26 /* AppDelegate.m in Sources */,
 				E2E83855189E718500D5DE26 /* IIShortNotificationPresenter.m in Sources */,
@@ -420,7 +426,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -459,7 +465,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
