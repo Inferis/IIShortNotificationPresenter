@@ -18,9 +18,12 @@ static inline BOOL IsEmpty(id thing) {
 @implementation IIShortNotificationDefaultView {
     UILabel *_messageLabel, *_titleLabel;
     NSLayoutConstraint *_spacerConstraint;
+    NSLayoutConstraint *_titleHeightConstraint;
+    NSLayoutConstraint *_accessoryViewWidthConstraint;
     NSLayoutConstraint *_accessoryViewRightConstraint;
     UIView *_accessoryView;
-    UIView *_slideupView;
+    UIView *_sliderView;
+    UIView *_contentView;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -40,62 +43,176 @@ static inline BOOL IsEmpty(id thing) {
     self.layer.shadowOpacity = 0.5;
     self.layer.masksToBounds = NO;
 
+    _contentView = [UIView new];
+    _contentView.opaque = NO;
+    _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:_contentView];
+
+    UIView *topView = nil;
+    UIView *bottomView = nil;
+    UIView *leftView = nil;
+    UIView *rightView = nil;
+
+    if (!_sliderView) {
+        _sliderView = [self viewForSliderAccessory];
+        if (_sliderView) {
+            _sliderView.translatesAutoresizingMaskIntoConstraints = NO;
+            NSMutableArray* constraints = [NSMutableArray array];
+
+            UIRectEdge edge = [self edgeForSliderAccessory];
+            if (edge == UIRectEdgeTop || edge == UIRectEdgeBottom) {
+                // align horizontally
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                    attribute:NSLayoutAttributeCenterX
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self
+                                                                    attribute:NSLayoutAttributeCenterX
+                                                                   multiplier:1
+                                                                     constant:0]];
+            }
+            else if (edge == UIRectEdgeLeft || edge == UIRectEdgeRight) {
+                [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                    attribute:NSLayoutAttributeCenterY
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self
+                                                                    attribute:NSLayoutAttributeCenterY
+                                                                   multiplier:1
+                                                                     constant:0]];
+            }
+
+            switch (edge) {
+                case UIRectEdgeTop:
+                    // pin to top
+                    topView = _sliderView;
+                    [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                        attribute:NSLayoutAttributeTop
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self
+                                                                        attribute:NSLayoutAttributeTop
+                                                                       multiplier:1
+                                                                         constant:MARGIN]];
+                    break;
+                case UIRectEdgeBottom:
+                    // pin to bottom
+                    bottomView = _sliderView;
+                    [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                       multiplier:1
+                                                                         constant:-MARGIN]];
+                    break;
+                case UIRectEdgeLeft:
+                    // pin to left
+                    leftView = _sliderView;
+                    [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                        attribute:NSLayoutAttributeLeft
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self
+                                                                        attribute:NSLayoutAttributeLeft
+                                                                       multiplier:1
+                                                                         constant:MARGIN]];
+                    break;
+                case UIRectEdgeRight:
+                    // pin to right
+                    rightView = _sliderView;
+                    [constraints addObject:[NSLayoutConstraint constraintWithItem:_sliderView
+                                                                        attribute:NSLayoutAttributeRight
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self
+                                                                        attribute:NSLayoutAttributeRight
+                                                                       multiplier:1
+                                                                         constant:-MARGIN]];
+                    break;
+                default:
+                    break;
+            }
+            
+            [self addSubview:_sliderView];
+            [self addConstraints:constraints];
+            [_sliderView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
+            [_sliderView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisVertical];
+        }
+    }
+
     if (!_accessoryView) {
         _accessoryView = [self viewForAccessory];
-        _accessoryView.translatesAutoresizingMaskIntoConstraints = NO;
-        NSArray* constraints = @[
-                                 // align horizontally
-                                 [NSLayoutConstraint constraintWithItem:_accessoryView
-                                                              attribute:NSLayoutAttributeCenterY
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeCenterY
-                                                             multiplier:1
-                                                               constant:0],
-                                 // pin to right
-                                 [NSLayoutConstraint constraintWithItem:_accessoryView
-                                                              attribute:NSLayoutAttributeRight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeRight
-                                                             multiplier:1
-                                                               constant:-MARGIN],
-                                 ];
+        if (_accessoryView) {
+            _accessoryView.translatesAutoresizingMaskIntoConstraints = NO;
+            NSArray* constraints = @[
+                                     // width
+                                     [NSLayoutConstraint constraintWithItem:_accessoryView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationLessThanOrEqual
+                                                                     toItem:nil
+                                                                  attribute:NSLayoutAttributeNotAnAttribute
+                                                                 multiplier:1
+                                                                   constant:1e8],
+                                     // align horizontally
+                                     [NSLayoutConstraint constraintWithItem:_accessoryView
+                                                                  attribute:NSLayoutAttributeCenterY
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self
+                                                                  attribute:NSLayoutAttributeCenterY
+                                                                 multiplier:1
+                                                                   constant:0],
+                                     // pin to right
+                                     [NSLayoutConstraint constraintWithItem:_accessoryView
+                                                                  attribute:NSLayoutAttributeRight
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:rightView ?: self
+                                                                  attribute:rightView ? NSLayoutAttributeLeft : NSLayoutAttributeRight
+                                                                 multiplier:1
+                                                                   constant:rightView ? -MARGIN : 0],
+                                     ];
 
-        [self addSubview:_accessoryView];
-        [self addConstraints:constraints];
-        _accessoryViewRightConstraint = [constraints lastObject];
-        [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
-        [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisVertical];
-        [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
+            [self addSubview:_accessoryView];
+            [self addConstraints:constraints];
+            rightView = _accessoryView;
+            _accessoryViewWidthConstraint = [constraints firstObject];
+            _accessoryViewRightConstraint = [constraints lastObject];
+            [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
+            [_accessoryView setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisVertical];
+            [_accessoryView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
+        }
     }
 
-    if (!_slideupView) {
-        _slideupView = [self viewForSlideupAccessory];
-        _slideupView.translatesAutoresizingMaskIntoConstraints = NO;
-        NSArray* constraints = @[
-                                 // align horizontally
-                                 [NSLayoutConstraint constraintWithItem:_slideupView
-                                                              attribute:NSLayoutAttributeCenterX
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeCenterX
-                                                             multiplier:1
-                                                               constant:0],
-                                 // pin to bottom
-                                 [NSLayoutConstraint constraintWithItem:_slideupView
-                                                              attribute:NSLayoutAttributeBottom
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
-                                                              attribute:NSLayoutAttributeBottom
-                                                             multiplier:1
-                                                               constant:-MARGIN]
-                                 ];
 
-        [self addSubview:_slideupView];
-        [self addConstraints:constraints];
-        [_slideupView setContentHuggingPriority:1000 forAxis:UILayoutConstraintAxisVertical];
-    }
+    [self addConstraints:@[
+                           // pin left
+                           [NSLayoutConstraint constraintWithItem:_contentView
+                                                        attribute:NSLayoutAttributeLeft
+                                                        relatedBy:NSLayoutRelationEqual
+                                                           toItem:leftView ?: self
+                                                        attribute:leftView ? NSLayoutAttributeRight : NSLayoutAttributeLeft
+                                                       multiplier:1
+                                                         constant:MARGIN],
+                           // pin right
+                           [NSLayoutConstraint constraintWithItem:_contentView
+                                                        attribute:NSLayoutAttributeRight
+                                                        relatedBy:NSLayoutRelationEqual
+                                                           toItem:rightView ?: self
+                                                        attribute:rightView ? NSLayoutAttributeLeft : NSLayoutAttributeRight
+                                                       multiplier:1
+                                                         constant:-MARGIN],
+                           // pin top
+                           [NSLayoutConstraint constraintWithItem:_contentView
+                                                        attribute:NSLayoutAttributeTop
+                                                        relatedBy:NSLayoutRelationEqual
+                                                           toItem:topView ?: self
+                                                        attribute:topView ? NSLayoutAttributeBottom : NSLayoutAttributeTop
+                                                       multiplier:1
+                                                         constant:MARGIN],
+                           // pin bottom
+                           [NSLayoutConstraint constraintWithItem:_contentView
+                                                        attribute:NSLayoutAttributeBottom
+                                                        relatedBy:NSLayoutRelationEqual
+                                                           toItem:bottomView ?: self
+                                                        attribute:bottomView ? NSLayoutAttributeTop : NSLayoutAttributeBottom
+                                                       multiplier:1
+                                                         constant:-MARGIN],
+                           ]];
 
     if (!_titleLabel) {
         _titleLabel = [UILabel new];
@@ -106,28 +223,36 @@ static inline BOOL IsEmpty(id thing) {
         [self applyTitleAppearance:_titleLabel];
         NSArray* constraints = @[
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationLessThanOrEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeNotAnAttribute
+                                                             multiplier:1
+                                                               constant:1e8],
+                                 [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeTop
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
+                                                                 toItem:_contentView
                                                               attribute:NSLayoutAttributeTop
                                                              multiplier:1
-                                                               constant:MARGIN],
+                                                               constant:0],
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeLeft
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self
+                                                                 toItem:_contentView
                                                               attribute:NSLayoutAttributeLeft
                                                              multiplier:1
-                                                               constant:MARGIN],
+                                                               constant:0],
                                  [NSLayoutConstraint constraintWithItem:_titleLabel
                                                               attribute:NSLayoutAttributeRight
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_accessoryView
+                                                                 toItem:_contentView
                                                               attribute:NSLayoutAttributeRight
                                                              multiplier:1
-                                                               constant:-MARGIN]
+                                                               constant:0]
                                  ];
         [self addSubview:_titleLabel];
+        _titleHeightConstraint = [constraints firstObject];
         [self addConstraints:constraints];
     }
 
@@ -145,21 +270,28 @@ static inline BOOL IsEmpty(id thing) {
                                                                toItem:_titleLabel
                                                             attribute:NSLayoutAttributeBottom
                                                            multiplier:1
-                                                             constant:MARGIN],
+                                                             constant:0],
+                               [NSLayoutConstraint constraintWithItem:_messageLabel
+                                                            attribute:NSLayoutAttributeBottom
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:_contentView
+                                                            attribute:NSLayoutAttributeBottom
+                                                           multiplier:1
+                                                             constant:0],
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeLeft
                                                             relatedBy:NSLayoutRelationEqual
-                                                               toItem:self
+                                                               toItem:_contentView
                                                             attribute:NSLayoutAttributeLeft
                                                            multiplier:1
-                                                             constant:MARGIN],
+                                                             constant:0],
                                [NSLayoutConstraint constraintWithItem:_messageLabel
                                                             attribute:NSLayoutAttributeRight
                                                             relatedBy:NSLayoutRelationEqual
-                                                               toItem:_accessoryView
+                                                               toItem:_contentView
                                                             attribute:NSLayoutAttributeRight
                                                            multiplier:1
-                                                             constant:-MARGIN]
+                                                             constant:0]
                                ];
         [self addSubview:_messageLabel];
         [self addConstraints:constraints];
@@ -170,7 +302,10 @@ static inline BOOL IsEmpty(id thing) {
 
 - (void)updateConstraints {
     // adjust title/message space according to values set
+    _titleHeightConstraint.constant = IsEmpty(_titleLabel.attributedText) ? 0 : 1e8;
+
     _spacerConstraint.constant = [self spacerHeight];
+    _accessoryViewWidthConstraint.constant = _accessoryView.hidden ? 0 : 1e8;
     _accessoryViewRightConstraint.constant = _accessoryView.hidden ? 0 : -MARGIN;
     [super updateConstraints];
 }
@@ -198,23 +333,6 @@ static inline BOOL IsEmpty(id thing) {
     [_messageLabel removeConstraint:labelAsWideAsPossibleConstraint];
 
     [super layoutSubviews];
-}
-
-
-- (CGSize)intrinsicContentSize
-{
-    [self layoutSubviews];
-    CGFloat titleHeight = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:_titleLabel.font}].height;
-    CGSize desired = [_messageLabel systemLayoutSizeFittingSize:UILayoutFittingExpandedSize];
-    CGFloat width = desired.width + MARGIN*2;
-    CGFloat messageHeight = desired.height;
-
-    CGFloat sliderHeight = [(_slideupView ?: [self viewForSlideupAccessory]) intrinsicContentSize].height;
-    if (sliderHeight > 0)
-        sliderHeight += MARGIN;
-
-    CGFloat height = MARGIN*2 + [self spacerHeight] + sliderHeight + titleHeight + messageHeight;
-    return CGSizeMake(width, height);
 }
 
 - (void)setError:(NSString *)error {
@@ -268,7 +386,7 @@ static inline BOOL IsEmpty(id thing) {
             break;
 
         case IIShortNotificationConfirmation:
-            return [UIColor greenColor];
+            return [UIColor colorWithRed:0 green:0.8 blue:0 alpha:1];
 
         default:
             return [UIColor blueColor];
@@ -290,8 +408,13 @@ static inline BOOL IsEmpty(id thing) {
     return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationDefaultChevron"]];
 }
 
-- (UIView *)viewForSlideupAccessory {
+- (UIView *)viewForSliderAccessory {
     return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IIShortNotificationSlideUpChevron"]];
+}
+
+- (UIRectEdge)edgeForSliderAccessory
+{
+    return UIRectEdgeBottom;
 }
 
 - (NSString*)defaultTitleForType:(IIShortNotificationType)type {

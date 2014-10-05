@@ -9,7 +9,8 @@
 @interface IIShortNotificationDefaultView : UIView<IIShortNotificationView>
 
 - (UIView*)viewForAccessory;
-- (UIView *)viewForSlideupAccessory;
+- (UIView *)viewForSliderAccessory;
+- (UIRectEdge)edgeForSliderAccessory;
 - (UIColor*)colorForType:(IIShortNotificationType)type;
 - (void)applyTitleAppearance:(UILabel*)label;
 - (void)applyMessageAppearance:(UILabel*)label;
