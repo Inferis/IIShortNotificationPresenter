@@ -10,7 +10,7 @@
 @implementation IIShortNotificationSerialQueue {
     NSMutableArray* _queue;
     BOOL _presenting;
-    id<IIShortNotificationQueueHandler> _presenter;
+    __weak id<IIShortNotificationQueueHandler> _presenter;
 }
 
 - (instancetype)init
