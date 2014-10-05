@@ -7,7 +7,7 @@
 #import "IIShortNotificationPresentation+Internal.h"
 
 @implementation IIShortNotificationConcurrentQueue {
-    id<IIShortNotificationQueueHandler> _handler;
+    __weak id<IIShortNotificationQueueHandler> _handler;
     NSMutableArray* _queue;
     NSUInteger _presenting;
 }
