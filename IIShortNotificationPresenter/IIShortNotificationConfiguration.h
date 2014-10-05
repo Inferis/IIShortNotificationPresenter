@@ -23,13 +23,19 @@
 @property (nonatomic, strong) Class notificationViewClass;
 
 /**
+ *  Sets the notification view class with a configuration block.
+ */
+- (void)setNotificationViewClass:(Class)notificationViewClass configured:(void (^)(UIView<IIShortNotificationView>* view))configure;
+
+
+/**
  *  Set the class of the queue to use when presenting a notification.
  *  This class should implement the IIShortNotificationQueue protocol.
  */
 @property (nonatomic, strong) Class notificationQueueClass;
 
 /**
- *  Sets the notification layout class with an configuration block.
+ *  Sets the notification layout class with a configuration block.
  */
 - (void)setNotificationQueueClass:(Class)notificationQueueClass configured:(void(^)(id<IIShortNotificationQueue> queue))configure;
 
@@ -40,7 +46,7 @@
 @property (nonatomic, strong) Class notificationLayoutClass;
 
 /**
- *  Sets the notification layout class with an configuration block.
+ *  Sets the notification layout class with a configuration block.
  */
 - (void)setNotificationLayoutClass:(Class)notificationLayoutClass configured:(void(^)(id<IIShortNotificationLayout> layout))configure;
 

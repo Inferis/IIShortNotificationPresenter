@@ -12,8 +12,10 @@
 #import "IIShortNotificationDefaultView.h"
 
 @implementation IIShortNotificationConfiguration {
-    void (^_notificationQueueClassConfigurator)(id<IIShortNotificationQueue>);
-    void (^_notificationLayoutClassConfigurator)(id<IIShortNotificationLayout>);
+    void (^_notificationQueueClassConfigurator)(id<IIShortNotificationQueue> layout);
+    void (^_notificationLayoutClassConfigurator)(id<IIShortNotificationLayout> queue);
+    void (^_notificationViewClassConfigurator)(UIView<IIShortNotificationView>* view);
+
 }
 
 - (instancetype)init
@@ -34,7 +36,7 @@
     [self setNotificationLayoutClass:notificationLayoutClass configured:nil];
 }
 
-- (void)setNotificationLayoutClass:(Class)notificationLayoutClass configured:(void (^)(id<IIShortNotificationLayout>))configure
+- (void)setNotificationLayoutClass:(Class)notificationLayoutClass configured:(void (^)(id<IIShortNotificationLayout> layout))configure
 {
     _notificationLayoutClass = notificationLayoutClass ?: [IIShortNotificationTopLayout class];
     _notificationLayoutClassConfigurator = configure;
@@ -45,7 +47,7 @@
     [self setNotificationQueueClass:notificationQueueClass configured:nil];
 }
 
-- (void)setNotificationQueueClass:(Class)notificationQueueClass configured:(void (^)(id<IIShortNotificationQueue>))configure
+- (void)setNotificationQueueClass:(Class)notificationQueueClass configured:(void (^)(id<IIShortNotificationQueue> queue))configure
 {
     _notificationQueueClass = notificationQueueClass ?: [IIShortNotificationSerialQueue class];
     _notificationQueueClassConfigurator = configure;
@@ -53,8 +55,15 @@
 
 - (void)setNotificationViewClass:(Class)notificationViewClass
 {
-    _notificationViewClass = notificationViewClass ?: [IIShortNotificationDefaultView class];
+    [self setNotificationViewClass:notificationViewClass configured:nil];
 }
+
+- (void)setNotificationViewClass:(Class)notificationViewClass configured:(void (^)(UIView<IIShortNotificationView>* view))configure
+{
+    _notificationViewClass = notificationViewClass ?: [IIShortNotificationDefaultView class];
+    _notificationViewClassConfigurator = configure;
+}
+
 
 - (id<IIShortNotificationQueue>)queueWithHandler:(id<IIShortNotificationQueueHandler>)handler
 {
@@ -76,7 +85,11 @@
 
 - (UIView<IIShortNotificationView>*)view
 {
-    return [_notificationViewClass new];
+    UIView<IIShortNotificationView>* view = [_notificationViewClass new];
+    if (_notificationViewClassConfigurator) {
+        _notificationViewClassConfigurator(view);
+    }
+    return view;
 }
 
 - (id)copyWithZone:(NSZone *)zone
