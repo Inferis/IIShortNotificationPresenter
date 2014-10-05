@@ -357,6 +357,14 @@ IIShortNotificationConfiguration *_defaultConfiguration;
 - (id<IIShortNotificationPresentation>)presenter {
     IIShortNotificationPresenter* presenter = objc_getAssociatedObject(self, @selector(presenter));
     if (!presenter) {
+        UIView *view = nil;
+        UIView*(^viewProvider)(UIViewController *controller) = [[IIShortNotificationPresenter defaultConfiguration] containerViewProvider];
+        if (viewProvider) {
+            view = viewProvider(self);
+        }
+        if (!view) {
+            view = self.view;
+        }
         presenter = [[IIShortNotificationPresenter alloc] initWithContainerView:self.view];
         objc_setAssociatedObject(self, @selector(presenter), presenter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }

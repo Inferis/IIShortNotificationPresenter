@@ -51,6 +51,10 @@
  */
 @property (nonatomic, assign) NSTimeInterval autoDismissDelay;
 
+/**
+ *  Allows the user to have a custom root view provid
+ */
+@property (nonatomic, copy) UIView*(^containerViewProvider)(UIViewController *controller);
 
 - (id<IIShortNotificationQueue>)queueWithHandler:(id<IIShortNotificationQueueHandler>)handler;
 - (id<IIShortNotificationLayout>)layoutWithContext:(id<IIShortNotificationLayoutContext>)context;

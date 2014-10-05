@@ -88,6 +88,7 @@
     copy->_notificationQueueClassConfigurator = [_notificationQueueClassConfigurator copy];
     copy->_notificationViewClass = _notificationViewClass;
     copy->_autoDismissDelay = _autoDismissDelay;
+    copy->_containerViewProvider = _containerViewProvider;
     return copy;
 }
 
