@@ -29,7 +29,7 @@
 
 
 - (IBAction)pressedBurst:(UIButton*)sender {
-    NSUInteger count = 1 + arc4random() % 4;
+    NSUInteger count = 2 + arc4random() % 3;
     [self presentConfirmation:[NSString stringWithFormat:@"Sending a burst of %lu notifications.", count]];
     for (NSUInteger i=0; i<count; ++i) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(i*0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
