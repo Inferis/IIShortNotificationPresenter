@@ -386,7 +386,7 @@ IIShortNotificationConfiguration *_defaultConfiguration;
         if (!view) {
             view = self.view;
         }
-        presenter = [[IIShortNotificationPresenter alloc] initWithContainerView:self.view];
+        presenter = [[IIShortNotificationPresenter alloc] initWithContainerView:view];
         objc_setAssociatedObject(self, @selector(presenter), presenter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 
