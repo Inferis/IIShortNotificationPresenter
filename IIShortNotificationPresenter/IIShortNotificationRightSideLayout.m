@@ -70,7 +70,8 @@
 - (void)beginPresentAnimation:(IIShortNotificationViewInstance*)instance
 {
     [_instances addObject:instance];
-    instance.sideConstraint.constant = instance.view.intrinsicContentSize.width;
+    instance.initialWidth = [instance.view systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].width;
+    instance.sideConstraint.constant = instance.initialWidth;
     [self rebuildAttachments];
 }
 
@@ -86,7 +87,7 @@
 
 - (void)endDismissAnimation:(IIShortNotificationViewInstance*)instance
 {
-    instance.sideConstraint.constant = instance.view.intrinsicContentSize.width;
+    instance.sideConstraint.constant = instance.initialWidth;
     [_layoutContext.containerView setNeedsUpdateConstraints];
 }
 
