@@ -1,2 +1,2 @@
 language: objective-c
-xcode_project: NotificationDemo.xcodeproj
+xcode_project: NotificationDemo/NotificationDemo.xcodeproj
