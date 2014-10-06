@@ -12,6 +12,7 @@
 @interface IIShortNotificationRightSideLayout : NSObject <IIShortNotificationLayout>
 
 @property (nonatomic, assign) CGFloat spacing;
+@property (nonatomic, assign) CGFloat minimumTopSpacing;
 @property (nonatomic, assign) CGFloat notificationWidth;
 
 @end

@@ -12,6 +12,8 @@
 
 @interface IIShortNotificationViewInstance (IIShortNotificationSideLayout)
 
+@property (nonatomic, assign) CGFloat initialWidth;
+
 - (NSLayoutConstraint *)sideConstraint;
 
 @end
@@ -100,7 +102,7 @@
 
     UIView *relativeView = _layoutContext.containerView;
     NSLayoutAttribute relativeAttribute = NSLayoutAttributeTop;
-    CGFloat relativeConstant = IIStatusBarHeight(_layoutContext.containerView);
+    CGFloat relativeConstant = MAX(IIStatusBarHeight(_layoutContext.containerView), self.minimumTopSpacing);
     for (IIShortNotificationViewInstance *instance in _instances) {
         NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:instance.view
                                                                       attribute:NSLayoutAttributeTop
@@ -137,5 +139,14 @@
     return [self.constraints firstObject];
 }
 
+- (CGFloat)initialWidth
+{
+    return [objc_getAssociatedObject(self, @selector(initialWidth)) floatValue];
+}
+
+- (void)setInitialWidth:(CGFloat)initialWidth
+{
+    objc_setAssociatedObject(self, @selector(initialWidth), @(initialWidth), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 @end
