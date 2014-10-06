@@ -1,9 +1,10 @@
 IIShortNotificationPresenter
 ============================
 
-![](http://img.shields.io/cocoapods/l/IIShortNotificationPresenter.svg) &nbsp;
-![](http://img.shields.io/cocoapods/p/IIShortNotificationPresenter.svg) &nbsp;
-![](https://travis-ci.org/Inferis/IIShortNotificationPresenter.svg)
+![License](http://img.shields.io/cocoapods/l/IIShortNotificationPresenter.svg)
+![Version](https://img.shields.io/cocoapods/v/IIShortNotificationPresenter.svg?style=flat)
+![Platform](http://img.shields.io/cocoapods/p/IIShortNotificationPresenter.svg)
+![Build Status](https://travis-ci.org/Inferis/IIShortNotificationPresenter.svg)
 
 
 Presents short notifications over a view. Supports queuing and 3 presentation styles. Is highly flexible and configurable:
