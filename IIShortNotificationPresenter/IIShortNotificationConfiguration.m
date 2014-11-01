@@ -26,6 +26,7 @@
         self.notificationLayoutClass = nil;
         self.notificationQueueClass = nil;
         self.notificationViewClass = nil;
+        self.autoDismissingTypes = @[@(IIShortNotificationConfirmation), @(IIShortNotificationNotification)];
         _autoDismissDelay = 5;
     }
     return self;
@@ -81,6 +82,15 @@
         _notificationLayoutClassConfigurator(layout);
     }
     return layout;
+}
+
+- (BOOL)shouldAutoDismiss:(IIShortNotificationType)type
+{
+    for (NSNumber *configuredType in self.autoDismissingTypes) {
+        if ([configuredType unsignedIntegerValue] == type) return YES;
+    }
+
+    return NO;
 }
 
 - (UIView<IIShortNotificationView>*)view

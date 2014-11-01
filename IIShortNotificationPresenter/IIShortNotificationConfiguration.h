@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IIShortNotificationPresentation.h"
 
 @protocol IIShortNotificationLayout;
 @protocol IIShortNotificationLayoutContext;
@@ -57,6 +58,10 @@
  */
 @property (nonatomic, assign) NSTimeInterval autoDismissDelay;
 
+@property (nonatomic, strong) NSArray* autoDismissingTypes;
+
+- (BOOL)shouldAutoDismiss:(IIShortNotificationType)type;
+
 /**
  *  Allows the user to have a custom root view provid
  */
@@ -65,5 +70,6 @@
 - (id<IIShortNotificationQueue>)queueWithHandler:(id<IIShortNotificationQueueHandler>)handler;
 - (id<IIShortNotificationLayout>)layoutWithContext:(id<IIShortNotificationLayoutContext>)context;
 - (UIView<IIShortNotificationView>*)view;
+
 
 @end
