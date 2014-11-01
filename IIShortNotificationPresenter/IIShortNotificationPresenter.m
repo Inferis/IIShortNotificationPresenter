@@ -250,7 +250,7 @@ IIShortNotificationConfiguration *_defaultConfiguration;
     } completion:^(BOOL finished) {
     }];
 
-    if (type != IIShortNotificationError) {
+    if ([_configuration shouldAutoDismiss:type]) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismiss:) object:instance];
         [self performSelector:@selector(autoDismiss:) withObject:instance afterDelay:self.autoDismissDelay];
     }
