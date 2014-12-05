@@ -87,6 +87,10 @@
 
 }
 
+- (UISwipeGestureRecognizerDirection)directionsForSwipingDismissal
+{
+    return UISwipeGestureRecognizerDirectionUp;
+}
 
 
 @end
