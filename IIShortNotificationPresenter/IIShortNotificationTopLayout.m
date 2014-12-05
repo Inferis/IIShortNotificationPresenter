@@ -60,11 +60,12 @@
     instance.constraints = constraints;
     [_layoutContainer.containerView addSubview:instance.view];
     [_layoutContainer.containerView addConstraints:constraints];
+    [_layoutContainer.containerView setNeedsUpdateConstraints];
 }
 
 - (void)beginPresentAnimation:(IIShortNotificationViewInstance*)instance;
 {
-    [instance.view sizeToFit];
+    [instance.view layoutIfNeeded];
     instance.topConstraint.constant = -instance.view.frame.size.height;
 }
 
