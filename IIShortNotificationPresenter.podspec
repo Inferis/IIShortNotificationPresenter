@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/inferis'
   s.author    = { 'Tom Adriaenssen' =>  'http://inferis.org/' }
   s.source    = { :git => 'https://github.com/Inferis/IIShortNotificationPresenter.git',
-                  :tag => '1.2.5'}
+                  :tag => '1.2.6'}
   s.source_files  = 'IIShortNotificationPresenter/*.{h,m}'
   s.resources     = 'IIShortNotificationPresenter/*.png'
   s.requires_arc  = true
