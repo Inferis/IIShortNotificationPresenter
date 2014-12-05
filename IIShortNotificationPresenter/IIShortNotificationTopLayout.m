@@ -64,7 +64,8 @@
 
 - (void)beginPresentAnimation:(IIShortNotificationViewInstance*)instance;
 {
-    instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
+    [instance.view sizeToFit];
+    instance.topConstraint.constant = -instance.view.frame.size.height;
 }
 
 - (void)endPresentAnimation:(IIShortNotificationViewInstance*)instance;
@@ -79,7 +80,7 @@
 
 - (void)endDismissAnimation:(IIShortNotificationViewInstance*)instance;
 {
-    instance.topConstraint.constant = -instance.view.intrinsicContentSize.height;
+    instance.topConstraint.constant = -instance.view.frame.size.height;
 }
 
 - (void)removeInstance:(IIShortNotificationViewInstance*)instance;
