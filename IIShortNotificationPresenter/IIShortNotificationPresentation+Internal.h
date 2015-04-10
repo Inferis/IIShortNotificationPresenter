@@ -29,10 +29,12 @@ static inline CGFloat IIStatusBarHeight(UIView *view) {
         if (diff > 0) {
             return 0;
         }
+#if !defined(II_APP_EXTENSION)
         if ([sv isKindOfClass:NSClassFromString(@"UIViewControllerWrapperView")]) {
             CGFloat height = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation] || [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? 64 : 52;
             return height;
         }
+#endif
         psv = sv;
         sv = [sv superview];
     }
