@@ -322,6 +322,9 @@ IIShortNotificationConfiguration *_defaultConfiguration;
         instance = [IIShortNotificationViewInstance new];
         instance.view = [_configuration view];
         instance.view.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedNotification:)];
+        [instance.view addGestureRecognizer:tapGesture];
     }
 
     [_overlayView addSubview:instance.view];
@@ -333,31 +336,16 @@ IIShortNotificationConfiguration *_defaultConfiguration;
     return instance;
 }
 
+#pragma mark - callback tap
+
+- (void)tappedNotification:(UITapGestureRecognizer *)tapper {
+    [self performTap:tapper dismissal:IIShortNotificationUserActionDismissal];
+}
+
 #pragma mark - dismissing tap
 
 - (void)tapped:(UITapGestureRecognizer*)tapper {
-    IIShortNotificationViewInstance *tappedInstance;
-    BOOL viewTapped = NO;
-
-    @synchronized(_usedNotificationViews) {
-        for (IIShortNotificationViewInstance* instance in _usedNotificationViews) {
-            if (CGRectContainsPoint(instance.view.bounds, [tapper locationInView:instance.view])) {
-                tappedInstance = instance;
-                viewTapped = YES;
-                break;
-            }
-        }
-
-        tappedInstance = tappedInstance ?: [_usedNotificationViews firstObject];
-    }
-
-    if (!tappedInstance) return;
-
-    if (tappedInstance.accessory & viewTapped) {
-        [self dismiss:IIShortNotificationUserAccessoryDismissal instance:tappedInstance];
-    }
-    else
-        [self dismiss:IIShortNotificationUserDismissal instance:tappedInstance];
+    [self performTap:tapper dismissal:IIShortNotificationAutomaticDismissal];
 }
 
 - (void)swiped:(UITapGestureRecognizer*)swiper {
@@ -369,6 +357,39 @@ IIShortNotificationConfiguration *_defaultConfiguration;
     if (!topInstance) return;
 
     [self dismiss:IIShortNotificationUserDismissal instance:topInstance];
+}
+
+#pragma mark - dismissal
+
+- (void)performTap:(UITapGestureRecognizer *)tapper dismissal:(IIShortNotificationDismissal)dismissal {
+    IIShortNotificationViewInstance *tappedInstance;
+    BOOL viewTapped = NO;
+    
+    @synchronized(_usedNotificationViews) {
+        for (IIShortNotificationViewInstance* instance in _usedNotificationViews) {
+            if (CGRectContainsPoint(instance.view.bounds, [tapper locationInView:instance.view])) {
+                tappedInstance = instance;
+                viewTapped = YES;
+                break;
+            }
+        }
+        
+        tappedInstance = tappedInstance ?: [_usedNotificationViews firstObject];
+    }
+    
+    if (!tappedInstance) return;
+    
+    if (dismissal != IIShortNotificationAutomaticDismissal) {
+        // When an automatic notification dismissal is given,
+        // we pass this to the dissmiss callback so the user knows
+        // when the notification itself is tapped.
+        [self dismiss:dismissal instance:tappedInstance];
+    }
+    else if (tappedInstance.accessory & viewTapped) {
+        [self dismiss:IIShortNotificationUserAccessoryDismissal instance:tappedInstance];
+    }
+    else
+        [self dismiss:IIShortNotificationUserDismissal instance:tappedInstance];
 }
 
 @end
