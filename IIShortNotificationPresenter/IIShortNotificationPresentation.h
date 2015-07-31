@@ -27,7 +27,8 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationType) {
 typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
     IIShortNotificationAutomaticDismissal,
     IIShortNotificationUserDismissal,
-    IIShortNotificationUserAccessoryDismissal
+    IIShortNotificationUserAccessoryDismissal,
+    IIShortNotificationUserActionDismissal
 };
 
 @protocol IIShortNotificationPresentation <NSObject>
