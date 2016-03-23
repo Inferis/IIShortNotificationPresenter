@@ -150,5 +150,9 @@ typedef NS_ENUM(NSUInteger, IIShortNotificationDismissal) {
  */
 - (void)presentNotification:(NSString *)notification title:(NSString*)title accessory:(BOOL)accessory completion:(void(^)(IIShortNotificationDismissal dismissal))completion;
 
+/**
+ *  Remove all notifications from superview.
+ */
+- (void)dismissAllNotifications;
 
 @end
