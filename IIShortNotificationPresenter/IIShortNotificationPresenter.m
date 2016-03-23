@@ -142,6 +142,13 @@ IIShortNotificationConfiguration *_defaultConfiguration;
                  completion:completion];
 }
 
+- (void)dismissAllNotifications
+{
+    for (IIShortNotificationViewInstance* instance in _usedNotificationViews) {
+        [self dismiss:IIShortNotificationAutomaticDismissal instance:instance];
+    }
+}
+
 #pragma mark - Hard work
 
 - (void)queuePresentation:(IIShortNotificationType)type message:(NSString *)message title:(NSString *)title accessory:(BOOL)accessory completion:(void (^)(IIShortNotificationDismissal dismissal))completion
@@ -450,6 +457,11 @@ IIShortNotificationConfiguration *_defaultConfiguration;
 - (void)presentNotification:(NSString *)notification title:(NSString*)title accessory:(BOOL)accessory completion:(void(^)(IIShortNotificationDismissal dismissal))completion
 {
     [[self presenter] presentNotification:notification title:title accessory:accessory completion:completion];
+}
+
+- (void)dismissAllNotifications
+{
+    [[self presenter] dismissNotifcation];
 }
 
 @end
