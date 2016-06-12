@@ -250,10 +250,10 @@ IIShortNotificationConfiguration *_defaultConfiguration;
     } completion:^(BOOL finished) {
     }];
 
-    if ([_configuration shouldAutoDismiss:type]) {
+    //if ([_configuration shouldAutoDismiss:type]) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismiss:) object:instance];
         [self performSelector:@selector(autoDismiss:) withObject:instance afterDelay:self.autoDismissDelay];
-    }
+    //}
 }
 
 - (void)handlePresentationsFinished
